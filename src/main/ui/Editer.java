@@ -6,7 +6,7 @@ public class Editer {
     public StringBuffer strBuffer;
 
     public Editer(StringBuffer stringBuffer) {
-    this.strBuffer = stringBuffer;
+        this.strBuffer = stringBuffer;
     }
 
     public void showtext() {

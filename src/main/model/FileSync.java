@@ -6,16 +6,19 @@ import java.io.*;
 
 public class FileSync {
     protected static String location;
+    protected static String filename;
     public static StringBuffer contain; //What in the .java file
     
-    public FileSync(StringBuffer con, String loc) {
+    public FileSync(StringBuffer con, String loc,String filename) {
         this.contain = con;
         this.location = loc;
+        this.filename = filename + ".java";
     }
 
-    public FileSync(String loc) throws IOException {
+    public FileSync(String loc,String filename) throws IOException {
         this.contain = new StringBuffer();
         this.location = loc;
+        this.filename = filename + ".java";
     }
 
 
@@ -23,20 +26,28 @@ public class FileSync {
         return this.contain;
     }
 
-    String getLoc() {
+    public String getLoc() {
         return this.location;
     }
 
-    void setCon(StringBuffer con) {
+    public String getFilename() {
+        return this.filename;
+    }
+
+    public void setCon(StringBuffer con) {
         this.contain = con;
     }
 
-    void setLoc(String loc) {
+    public void setLoc(String loc) {
         this.location = loc;
     }
 
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
     public static void getFile() throws IOException {
-        InputStream inputS = new FileInputStream(location);
+        InputStream inputS = new FileInputStream(location + filename);
         String tmpLine;
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputS));
         tmpLine = reader.readLine();
