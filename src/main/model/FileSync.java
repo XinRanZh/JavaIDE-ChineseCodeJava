@@ -61,7 +61,7 @@ public class FileSync {
     }
 
     public void setFile() throws IOException {
-        FileWriter fileWriter = new FileWriter(location);
+        FileWriter fileWriter = new FileWriter(location + filename);
         fileWriter.write(String.valueOf(contain));
         fileWriter.close();
     }

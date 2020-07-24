@@ -26,52 +26,56 @@ public class Compile {
     }
 
 
-    public void build() throws IOException, InterruptedException {
+    public String build() throws IOException, InterruptedException {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec("javac " + tmpLoc + tmpfileName + ".java");
         InputStream outputStream = process.getInputStream();
         InputStream errorstream = process.getErrorStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(outputStream, "gb2312"));
         BufferedReader br2 = new BufferedReader(new InputStreamReader(errorstream, "gb2312"));
+        StringBuffer resultText = new StringBuffer();
         String line = null;
         String line2 = null;
         while ((line = br.readLine()) != null | (line2 = br2.readLine()) != null) {
             if (line != null) {
-                System.out.println(line);
+                resultText.append(line + '\n');
             } else {
-                System.out.println(line2);
+                resultText.append(line2 + '\n');
             }
         }
         int result = process.waitFor();
         if (result == 0) {
-            System.out.println("Complie Finished");
+            resultText.append("Complie Success");
         } else {
-            System.out.println("Complie Failed");
+            resultText.append("Complie Failed");
         }
+        return String.valueOf(resultText);
     }
 
-    public void run() throws IOException, InterruptedException {
+    public String run() throws IOException, InterruptedException {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec("cmd.exe /c cd " + tmpLoc + " & java " + tmpfileName);
         InputStream outputStream = process.getInputStream();
         InputStream errorstream = process.getErrorStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(outputStream, "gb2312"));
         BufferedReader br2 = new BufferedReader(new InputStreamReader(errorstream, "gb2312"));
+        StringBuffer resultText = new StringBuffer();
         String line = null;
         String line2 = null;
         while ((line = br.readLine()) != null | (line2 = br2.readLine()) != null) {
             if (line != null) {
-                System.out.println(line);
+                resultText.append(line + '\n');
             } else {
-                System.out.println(line2);
+                resultText.append(line2 + '\n');
             }
         }
         int result = process.waitFor();
         if (result == 0) {
-            System.out.println("Run Finished");
+            resultText.append("Run Success");
         } else {
-            System.out.println("Run Failed");
+            resultText.append("Run Failed");
         }
+        return String.valueOf(resultText);
 
     }
 }
