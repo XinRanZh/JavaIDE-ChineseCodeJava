@@ -72,6 +72,7 @@ public class Compile {
         } else {
             resultText.append(str + " Failed");
         }
+        process.destroy();
         return String.valueOf(resultText);
     }
 }
