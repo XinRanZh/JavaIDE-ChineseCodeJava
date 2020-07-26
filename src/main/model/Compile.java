@@ -79,3 +79,5 @@ public class Compile {
 
     }
 }
+//cd C:\java\ & java test.class
+//java C:\java\test.class
