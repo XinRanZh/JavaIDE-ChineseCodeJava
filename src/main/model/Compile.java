@@ -39,16 +39,16 @@ public class Compile {
     }
 
     public String run() throws IOException, InterruptedException {
-        Runtime runtime = Runtime.getRuntime();
-        Process process;
+        Runtime runtimerun = Runtime.getRuntime();
+        Process processrun;
         String os = System.getProperty("os.name");
         if (os.toLowerCase().startsWith("win")) {
-            process = runtime.exec("cmd.exe /c cd " + tmpLoc + " & java " + tmpfileName);
+            processrun = runtimerun.exec("cmd.exe /c cd " + tmpLoc + " & java " + tmpfileName);
         } else {
             String tmpLoclinux = tmpLoc.replaceAll("\\\\","/");
-            process = runtime.exec("cd " + tmpLoclinux + " && java " + tmpfileName);
+            processrun = runtimerun.exec("cd " + tmpLoclinux + " && java " + tmpfileName);
         }
-        return getRes(process,"Run");
+        return getRes(processrun,"Run");
     }
 
     private String getRes(Process process, String str) throws IOException, InterruptedException {
