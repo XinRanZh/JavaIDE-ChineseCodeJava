@@ -15,10 +15,10 @@ class CompileTest {
     //Step2: Convert This file from “Chinese-Java” to Java
     //Step3: Compile and Run and catch the result: this file work successfully/compile error
     void TestRunSuccess(){
+        String testLoc = "data\\JavaProjectTest\\";
         FileSync testing = null;
         try {
-            testing = new FileSync("C:\\Users\\79917\\OneDrive\\学习\\CPSC210\\project_d8x2b\\data"
-                    + "\\JavaProjectTest\\","test");
+            testing = new FileSync(testLoc,"test");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,9 +37,7 @@ class CompileTest {
         convert.dictionaryConvert();
         Compile compile = null;
         try {
-            compile = new Compile(convert.showResult(),"C:\\Users\\79917\\OneDrive\\学习\\CPSC210\\"
-                    + "project_d8x2b\\data"
-                    + "\\JavaProjectTest\\","test");
+            compile = new Compile(convert.showResult(),testLoc,"test");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,9 +61,9 @@ class CompileTest {
 
     void TestComplieFailed(){
         FileSync testing = null;
+        String testLoc = "data\\JavaProjectTest\\";
         try {
-            testing = new FileSync("C:\\Users\\79917\\OneDrive\\学习\\CPSC210\\project_d8x2b\\data"
-                    + "\\JavaProjectTest\\","test");
+            testing = new FileSync(testLoc,"test");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,18 +82,16 @@ class CompileTest {
         convert.dictionaryConvert();
         Compile compile = null;
         try {
-            compile = new Compile(convert.showResult(),"C:\\Users\\79917\\OneDrive\\学习\\CPSC210\\"
-                    + "project_d8x2b\\data"
-                    + "\\JavaProjectTest\\","testcompilefailed");
+            compile = new Compile(convert.showResult(),testLoc,"testcompilefailed");
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            assertEquals("C:\\Users\\79917\\OneDrive\\学习\\CPSC210\\project_d8x2b\\data\\" +
-                    "JavaProjectTest\\debug\\testcompilefailed.java:1: 错误: 类test是公共的, 应在名为 test.java 的文件中声明\n" +
+            assertEquals("data\\JavaProjectTest\\debug\\testcompilefailed.java:1: " +
+                    "error: class test is public, should be declared in a file named test.java\n" +
                     "public class test{\n" +
                     "       ^\n" +
-                    "1 个错误\n" +
+                    "1 error\n" +
                     "Complie Failed",compile.build());
         } catch (IOException e) {
             e.printStackTrace();

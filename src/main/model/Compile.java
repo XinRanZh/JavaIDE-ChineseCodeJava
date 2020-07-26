@@ -1,5 +1,7 @@
 package model;
 
+import com.sun.xml.internal.ws.api.ha.StickyFeature;
+
 import java.io.*;
 
 public class Compile {
@@ -28,33 +30,31 @@ public class Compile {
 
     public String build() throws IOException, InterruptedException {
         Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec("javac " + tmpLoc + tmpfileName + ".java");
-        InputStream outputStream = process.getInputStream();
-        InputStream errorstream = process.getErrorStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(outputStream, "gb2312"));
-        BufferedReader br2 = new BufferedReader(new InputStreamReader(errorstream, "gb2312"));
-        StringBuffer resultText = new StringBuffer();
-        String line = null;
-        String line2 = null;
-        while ((line = br.readLine()) != null | (line2 = br2.readLine()) != null) {
-            if (line != null) {
-                resultText.append(line + '\n');
-            } else {
-                resultText.append(line2 + '\n');
-            }
-        }
-        int result = process.waitFor();
-        if (result == 0) {
-            resultText.append("Complie Success");
+        String os = System.getProperty("os.name");
+        Process process;
+        if (os.toLowerCase().startsWith("win")) {
+            process = runtime.exec("javac " + tmpLoc + tmpfileName + ".java -J-Duser.language=en");
         } else {
-            resultText.append("Complie Failed");
+            String tmpLoclinux = tmpLoc.replaceAll("\\\\","/");
+            process = runtime.exec("javac " + tmpLoclinux + tmpfileName + ".java -J-Duser.language=en");
         }
-        return String.valueOf(resultText);
+        return getRes(process,"Complie");
     }
 
     public String run() throws IOException, InterruptedException {
         Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec("cmd.exe /c cd " + tmpLoc + " & java " + tmpfileName);
+        Process process;
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            process = runtime.exec("cmd.exe /c cd " + tmpLoc + " & java " + tmpfileName);
+        } else {
+            String tmpLoclinux = tmpLoc.replaceAll("\\\\","/");
+            process = runtime.exec("cd " + tmpLoclinux + " && java " + tmpfileName);
+        }
+        return getRes(process,"Run");
+    }
+
+    private String getRes(Process process, String str) throws IOException, InterruptedException {
         InputStream outputStream = process.getInputStream();
         InputStream errorstream = process.getErrorStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(outputStream, "gb2312"));
@@ -71,12 +71,11 @@ public class Compile {
         }
         int result = process.waitFor();
         if (result == 0) {
-            resultText.append("Run Success");
+            resultText.append(str + " Success");
         } else {
-            resultText.append("Run Failed");
+            resultText.append(str + " Failed");
         }
         return String.valueOf(resultText);
-
     }
 }
 //cd C:\java\ & java test.class
