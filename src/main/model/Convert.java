@@ -26,7 +26,13 @@ public class Convert {
     }
 
     void dictionaryReader() throws IOException {
-        InputStream inputS = new FileInputStream(".\\data\\" + dictName);
+        String os = System.getProperty("os.name");
+        InputStream inputS;
+        if (os.toLowerCase().startsWith("win")) {
+            inputS = new FileInputStream(".\\data\\" + dictName);
+        } else {
+            inputS = new FileInputStream("data/" + dictName);
+        }
         String tmpLine;
         count = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputS));
@@ -52,7 +58,14 @@ public class Convert {
         tmpDict.append(dictSource[count - 2] + "\n");
         tmpDict.append(dictResult[count - 2]);
         //Make sure there is no blank last line
-        FileWriter fileWriter = new FileWriter(".\\data\\" + dictname);
+        String os = System.getProperty("os.name");
+        FileWriter fileWriter;
+        if (os.toLowerCase().startsWith("win")) {
+            fileWriter = new FileWriter(".\\data\\" + dictname);
+        } else {
+            fileWriter = new FileWriter("data/" + dictname);
+        }
+
         fileWriter.write(String.valueOf(tmpDict));
         fileWriter.close();
     }
