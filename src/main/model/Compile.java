@@ -1,7 +1,5 @@
 package model;
 
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
-
 import java.io.*;
 
 public class Compile {
