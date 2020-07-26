@@ -98,6 +98,15 @@ class CompileTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        try {
+            assertEquals("Error: Could not find or load main class testcompilefailed\n" +
+                    "Caused by: java.lang.ClassNotFoundException: testcompilefailed\n" +
+                    "Run Failed",compile.run());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 }
 
 

@@ -43,10 +43,11 @@ public class Compile {
         Process processrun;
         String os = System.getProperty("os.name");
         if (os.toLowerCase().startsWith("win")) {
-            processrun = runtimerun.exec("cmd.exe /c cd " + tmpLoc + " & java " + tmpfileName);
+            processrun = runtimerun.exec("cmd.exe /c cd "
+                    + tmpLoc + " & java -Duser.language=en " + tmpfileName);
         } else {
             String tmpLoclinux = tmpLoc.replaceAll("\\\\","/");
-            processrun = runtimerun.exec("cd " + tmpLoclinux + " && java " + tmpfileName);
+            processrun = runtimerun.exec("cd " + tmpLoclinux + " && java -Duser.language=en " + tmpfileName);
         }
         return getRes(processrun,"Run");
     }
