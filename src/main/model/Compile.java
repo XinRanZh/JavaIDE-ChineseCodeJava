@@ -17,7 +17,6 @@ public class Compile {
     void creatTmpFile() throws IOException {
         File tmploc = new File(tmpLoc);
         File tmpFile = new File(tmpLoc, tmpfileName + ".java");
-        System.out.println(tmpLoc + tmpfileName);
         tmploc.mkdirs();
         tmpFile.createNewFile();
         FileWriter fileWriter = new FileWriter(tmpLoc + tmpfileName + ".java");

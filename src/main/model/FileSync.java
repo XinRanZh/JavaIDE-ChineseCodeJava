@@ -45,7 +45,14 @@ public class FileSync {
     }
 
     public static void getFile() throws IOException {
-        InputStream inputS = new FileInputStream(location + filename);
+        String os = System.getProperty("os.name");
+        InputStream inputS;
+        if (os.toLowerCase().startsWith("win")) {
+            inputS = new FileInputStream(location + filename);
+        } else {
+            String loclinux = location.replaceAll("\\\\","/");
+            inputS = new FileInputStream(loclinux + filename);
+        }
         String tmpLine;
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputS));
         tmpLine = reader.readLine();
@@ -59,7 +66,15 @@ public class FileSync {
     }
 
     public void setFile() throws IOException {
-        FileWriter fileWriter = new FileWriter(location + filename);
+        String os = System.getProperty("os.name");
+        FileWriter fileWriter;
+        if (os.toLowerCase().startsWith("win")) {
+            fileWriter = new FileWriter(location + filename);
+        } else {
+            String loclinux = location.replaceAll("\\\\","/");
+            fileWriter = new FileWriter(loclinux + filename);
+        }
+
         fileWriter.write(String.valueOf(contain));
         fileWriter.close();
     }

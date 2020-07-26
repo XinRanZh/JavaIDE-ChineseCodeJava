@@ -16,8 +16,6 @@ public class FileSyncTest {
     //Save the change, named testnew.java
 
     void FileSyncTest() throws IOException {
-        String absoluteLoc = "C:\\Users\\79917\\OneDrive\\学习\\CPSC210\\project_d8x2b\\data"
-                + "\\JavaProjectTest\\";
         String testLoc = "data\\JavaProjectTest\\";
         FileSync testing = new FileSync(testLoc,"test");
         FileSync.getFile();
