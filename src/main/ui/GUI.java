@@ -11,14 +11,10 @@ public class GUI {
     private String ops;
 
     public GUI() throws IOException, InterruptedException {
-        render("welcome");
+        render("mainmenu");
     }
 
     private void render(String ops) throws IOException, InterruptedException {
-        if (ops == "welcome") {
-            System.out.println("Thank you for Using this Program\nNow loading for you");
-            render("mainmenu");
-        }
         if (ops == "mainmenu") {
             mainmenu();
         }
@@ -32,6 +28,9 @@ public class GUI {
             case "create file": {
                 //TBD: I do not do this because it seems like what I need to be done at GUI part
             }
+            case "edit dictionary": {
+                dictruleadder();
+            }
             default: {
                 System.out.println("Enter Wrong Please ReTry");
                 render("mainmenu");
@@ -40,7 +39,7 @@ public class GUI {
 
     }
 
-    private String getRes(Process process) throws IOException {
+    private String getRes(Process process,String errormsg) throws IOException {
         InputStream outputStream = process.getInputStream();
         InputStream errorstream = process.getErrorStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(outputStream, "gb2312"));
@@ -53,6 +52,8 @@ public class GUI {
                 resultText.append(line + '\n');
             } else {
                 resultText.append(line2 + '\n');
+                System.out.println(errormsg);
+                nowdir.setLength(0);
             }
         }
         process.destroy();
@@ -97,10 +98,10 @@ public class GUI {
         } else {
             processmainmenu = runtimemainmenu.exec("ls");
         }
-        System.out.println(getRes(processmainmenu));
+        System.out.println(getRes(processmainmenu,""));
         System.out.println("Please choose following options\n");
         BufferedReader brin = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("A.open file\nB.creat file\nC.open direction");
+        System.out.println("A.open file\nB.open direction\nC.edit dictionary");
         System.out.println("please enter your options name, such as open file: ");
         ops = brin.readLine();
         render(ops);
@@ -134,7 +135,7 @@ public class GUI {
         return ops;
     }
 
-    private void dirrender() throws IOException, InterruptedException {
+    private int dirrender() throws IOException, InterruptedException {
         try {
             System.out.println("There are following files and directions in this folder\n");
             Runtime runtimediropen = Runtime.getRuntime();
@@ -147,11 +148,13 @@ public class GUI {
             } else {
                 processdiropen = runtimediropen.exec("cd " + ndir + " && ls");
             }
-            System.out.println(getRes(processdiropen));
+            System.out.println(getRes(processdiropen,"Dir Not Exist or other issue, backing to main menu"));
+            return 0;
         } catch (IOException ioe) {
             System.out.println("Dir Not Exist or other issue, backing to main menu");
             nowdir.setLength(0);
             render("mainmenu");
+            return 0;
         }
     }
 
@@ -171,4 +174,28 @@ public class GUI {
         System.out.println(compile.build());
         System.out.println(compile.run());
     }
+
+    private int dictruleadder() throws IOException, InterruptedException {
+        System.out.println("Please enter the Source of the rule or exit for exit");
+        BufferedReader dirod = new BufferedReader(new InputStreamReader(System.in));
+        String dirodt = dirod.readLine();
+        String source = "";
+        String result = "";
+        if (dirodt == "exit") {
+            System.out.println("Back to mainmenu");
+            render("mainmenu");
+            return 0;
+        } else {
+            source = dirodt;
+            System.out.println("Please enter the Source of the rule or exit for exit");
+            dirodt = dirod.readLine();
+            result = dirodt;
+        }
+        Convert convertdic = new Convert();
+        convertdic.addrule(source,result);
+        convertdic.dictionaryWritter("dict.txt");
+        render("mainmenu");
+        return 0;
+    }
+
 }

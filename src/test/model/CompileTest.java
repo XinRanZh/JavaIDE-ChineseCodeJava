@@ -42,7 +42,8 @@ class CompileTest {
             e.printStackTrace();
         }
         try {
-            assertEquals("Complie Success",compile.build());
+            assertEquals("Picked up JAVA_TOOL_OPTIONS: -Duser.language=en\n" +
+                    "Complie Success",compile.build());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -87,11 +88,11 @@ class CompileTest {
             e.printStackTrace();
         }
         try {
-            assertEquals("data\\JavaProjectTest\\debug\\testcompilefailed.java:1: " +
-                    "error: class test is public, should be declared in a file named test.java\n" +
+            assertEquals("data\\JavaProjectTest\\debug\\testcompilefailed.java:1: error: class test is public, should be declared in a file named test.java\n" +
                     "public class test{\n" +
                     "       ^\n" +
                     "1 error\n" +
+                    "Picked up JAVA_TOOL_OPTIONS: -Duser.language=en\n" +
                     "Complie Failed",compile.build());
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,7 +100,8 @@ class CompileTest {
             e.printStackTrace();
         }
         try {
-            assertEquals("Error: Could not find or load main class testcompilefailed\n" +
+            assertEquals("Picked up JAVA_TOOL_OPTIONS: -Duser.language=en\n" +
+                    "Error: Could not find or load main class testcompilefailed\n" +
                     "Caused by: java.lang.ClassNotFoundException: testcompilefailed\n" +
                     "Run Failed",compile.run());
         } catch (IOException e) {

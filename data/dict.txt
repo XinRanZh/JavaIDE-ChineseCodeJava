@@ -1,4 +1,4 @@
-字典版本1
+dict.txt
 抽象
 abstract
 断言
