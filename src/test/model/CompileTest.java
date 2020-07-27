@@ -42,8 +42,7 @@ class CompileTest {
             e.printStackTrace();
         }
         try {
-            assertEquals("Picked up JAVA_TOOL_OPTIONS: -Duser.language=en\n" +
-                    "Complie Success",compile.build());
+            assertEquals("Complie Success",compile.build());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -92,7 +91,6 @@ class CompileTest {
                     "public class test{\n" +
                     "       ^\n" +
                     "1 error\n" +
-                    "Picked up JAVA_TOOL_OPTIONS: -Duser.language=en\n" +
                     "Complie Failed",compile.build());
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +98,7 @@ class CompileTest {
             e.printStackTrace();
         }
         try {
-            assertEquals("Picked up JAVA_TOOL_OPTIONS: -Duser.language=en\n" +
+            assertEquals(
                     "Error: Could not find or load main class testcompilefailed\n" +
                     "Caused by: java.lang.ClassNotFoundException: testcompilefailed\n" +
                     "Run Failed",compile.run());
