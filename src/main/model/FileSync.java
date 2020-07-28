@@ -3,6 +3,7 @@ package model;
 import java.io.*;
 
 public class FileSync {
+    //Read and write the file
     protected static String location;
     protected static String filename;
     public static StringBuffer contain; //What in the .java file

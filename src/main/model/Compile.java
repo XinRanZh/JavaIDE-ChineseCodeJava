@@ -3,6 +3,8 @@ package model;
 import java.io.*;
 
 public class Compile {
+    //Complie and run the file
+    //Expect to run a whole project after next part
     StringBuffer tmpText;
     String tmpLoc;
     String tmpfileName;
@@ -26,6 +28,8 @@ public class Compile {
 
 
     public String build() throws IOException, InterruptedException {
+        //javac is the command to build java class file
+        //TBD:May change to javac -d . to build a whole project
         Runtime runtime = Runtime.getRuntime();
         String os = System.getProperty("os.name");
         Process process;
@@ -39,6 +43,7 @@ public class Compile {
     }
 
     public String run() throws IOException, InterruptedException {
+        //java + packagename + classname is the order that make the .class or jar run
         Runtime runtimerun = Runtime.getRuntime();
         Process processrun;
         String os = System.getProperty("os.name");
@@ -77,5 +82,4 @@ public class Compile {
         return String.valueOf(resultText);
     }
 }
-//cd C:\java\ & java test.class
-//java C:\java\test.class
+

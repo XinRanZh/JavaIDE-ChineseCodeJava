@@ -4,8 +4,9 @@ import javax.imageio.IIOException;
 import java.io.*;
 
 public class Convert {
-    //Convert Java Source from Chinese to English
-    //Rules from dictionary
+    //Convert Java Source from Chinese-Java Language to Normal Java Code
+    //Edit the dictionary and get the rules from dictionary
+
     private StringBuffer tmpText;
     private StringBuffer tmpDict;
     private String[] dictSource = new String[100];
@@ -82,7 +83,7 @@ public class Convert {
     }
 
     public void dictionaryConvert() {
-        //stub
+        //Convert using rules
         for (int n = 0; n < count - 1; n++) {
             String tmpString = tmpText.toString();
             tmpString = tmpString.replaceAll(dictSource[n],dictResult[n]);

@@ -10,11 +10,17 @@ public class GUI {
     private StringBuffer nowdir = new StringBuffer();
     private String ops;
 
+    //The "GUI" class, or command UI class for now is basically user interface
+    //Need to be rewrite when comming to the GUI part
+
     public GUI() throws IOException, InterruptedException {
         render("mainmenu");
     }
 
     private void render(String ops) throws IOException, InterruptedException {
+
+        //Render will render menu based on the entered options
+
         if (ops == "mainmenu") {
             mainmenu();
         }
@@ -40,6 +46,7 @@ public class GUI {
     }
 
     private String getRes(Process process,String errormsg) throws IOException {
+        //After running command in Linux shell or windows CMD, this function allow us to get result/error message
         InputStream outputStream = process.getInputStream();
         InputStream errorstream = process.getErrorStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(outputStream, "gb2312"));
