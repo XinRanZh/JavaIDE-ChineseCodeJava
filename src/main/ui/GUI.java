@@ -1,208 +1,198 @@
 package ui;
 
 import model.Compile;
-import model.Convert;
-import model.FileSync;
+import model.Project;
 
-import java.io.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 public class GUI {
-    private StringBuffer nowdir = new StringBuffer();
-    private String ops;
 
-    //The "GUI" class, or command UI class for now is basically user interface
-    //Need to be rewrite when comming to the GUI part
+    JFrame mainFrame = new JFrame("Spark IDE");
 
-    public GUI() throws IOException, InterruptedException {
-        render("mainmenu");
+    JPanel mainPanel = new JPanel();
+
+    JMenuBar mainMenu = new JMenuBar();
+    JTextPane editorPane = new JTextPane();
+    JTextArea projectContainArea = new JTextArea();
+    JTextArea resArea = new JTextArea();
+
+    JMenu projectMenu = new JMenu("Project 工程");
+    JMenu bandrMenu = new JMenu("Build Run 构建 运行");
+    JMenu saveMenu = new JMenu("Save 保存");
+    JMenu viewMenu = new JMenu("View 查看");
+
+    JMenuItem openProject = new JMenuItem("Open Project 打开工程");
+    JFileChooser projectFileChooser = new JFileChooser();
+    JMenuItem closeProject = new JMenuItem("Close Project 关闭工程");
+    JMenuItem newProject = new JMenuItem("New Project 新建工程");
+    JMenuItem buildOnly = new JMenuItem("Build 仅构建");
+    JMenuItem buildandRun = new JMenuItem("Build and Run 构建并运行");
+    JMenuItem saveOnly = new JMenuItem("Save Only 仅保存");
+    JMenuItem saveandExit = new JMenuItem("Save and Exit 保存并退出");
+    JMenuItem chooseFile = new JMenuItem("Choose the File That need Edit 选择需要编辑的文件");
+
+
+    Project pj;
+    Compile cp;
+    int index;
+
+    public GUI() {
+        mainFrame.setBounds(0,0,1280,720);
+
+
+        mainPanel.setBackground(Color.white);
+        mainPanel.setLayout(new BorderLayout());
+
+        menuBuilder();
+        mainMenu.add(projectMenu);
+        mainMenu.add(bandrMenu);
+        mainMenu.add(saveMenu);
+        mainMenu.add(viewMenu);
+
+        projectContainArea.insert("Not Opend Project Yet",0);
+        setOpenProject();
+        setBuildOnly();
+        setBuildandRun();
+        setSaveOnly();
+        setSaveandExit();
+        setchooseFile();
+
+        mainPanel.add(mainMenu,BorderLayout.NORTH);
+        mainPanel.add(editorPane,BorderLayout.CENTER);
+        mainPanel.add(projectContainArea,BorderLayout.WEST);
+        mainPanel.add(resArea,BorderLayout.SOUTH);
+
+        mainFrame.add(mainPanel);
+
+        mainFrame.setVisible(true);
     }
 
-    private void render(String ops) throws IOException, InterruptedException {
+    private void menuBuilder() {
+        projectMenu.add(openProject);
+        projectMenu.add(closeProject);
+        projectMenu.add(newProject);
+        bandrMenu.add(buildOnly);
+        bandrMenu.add(buildandRun);
+        saveMenu.add(saveOnly);
+        saveMenu.add(saveandExit);
+        viewMenu.add(chooseFile);
+    }
 
-        //Render will render menu based on the entered options
-
-        if (ops == "mainmenu") {
-            mainmenu();
-        }
-        switch (ops) {
-            case "open file": {
-                openfile();
+    private void setOpenProject() {
+        openProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setProjectFileChooserConfig();
+                String projectlocation = "";
+                if (projectFileChooser.showOpenDialog(openProject) == JFileChooser.APPROVE_OPTION) {
+                    File file = projectFileChooser.getSelectedFile();
+                    try {
+                        projectlocation = file.getCanonicalPath();
+                        String projectConfigName = file.getName();
+                        pj = new Project(false,projectlocation,projectConfigName);
+                        projectContainArea.setText(pj.getFileTree());
+                        index = 0;
+                        setEditorPane(index);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
             }
-            case "open direction": {
-                opendir();
+        });
+    }
+
+    private void setBuildOnly() {
+        buildOnly.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    cp = new Compile();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                try {
+                    pj.convertAll("dict.txt");
+                    String tmpRes = cp.build(pj.genCompileOrder());
+                    resArea.setText(tmpRes);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+
             }
-            case "create file": {
-                //TBD: I do not do this because it seems like what I need to be done at GUI part
+        });
+    }
+
+    private void setBuildandRun() {
+        buildandRun.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    cp = new Compile();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                try {
+                    pj.convertAll("dict.txt");
+                    String tmpRes = cp.build(pj.genCompileOrder());
+                    tmpRes = tmpRes + "\n" + cp.run(pj.getProjectlocation(),pj.getStartClassName());
+                    resArea.setText(tmpRes);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
-            case "edit dictionary": {
-                dictruleadder();
+        });
+    }
+
+    private void setSaveOnly() {
+        saveOnly.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pj.setSelectFile(index,editorPane.getText());
+                resArea.setText(resArea.getText() + "Save Success");
             }
-            default: {
-                System.out.println("Enter Wrong Please ReTry");
-                render("mainmenu");
+        });
+    }
+
+    private void setSaveandExit() {
+        saveandExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pj.setSelectFile(index,editorPane.getText());
+                System.exit(0);
             }
-        }
-
+        });
     }
 
-    private String getRes(Process process,String errormsg) throws IOException {
-        //After running command in Linux shell or windows CMD, this function allow us to get result/error message
-        InputStream outputStream = process.getInputStream();
-        InputStream errorstream = process.getErrorStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(outputStream, "gb2312"));
-        BufferedReader br2 = new BufferedReader(new InputStreamReader(errorstream, "gb2312"));
-        StringBuffer resultText = new StringBuffer();
-        String line = null;
-        String line2 = null;
-        while ((line = br.readLine()) != null | (line2 = br2.readLine()) != null) {
-            if (line != null) {
-                resultText.append(line + '\n');
-            } else {
-                resultText.append(line2 + '\n');
-                System.out.println(errormsg);
-                nowdir.setLength(0);
+    private void setchooseFile() {
+        chooseFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = JOptionPane.showInputDialog("Please enter the File's Number\n 请输入文件编号:");
+                index = Integer.valueOf(s);
+                System.out.println(index);
+                setEditorPane(index);
             }
-        }
-        process.destroy();
-        return String.valueOf(resultText);
+        });
     }
 
-    private void openfile() throws IOException, InterruptedException {
-        System.out.println("Enter Name of the File, DO NOT INCLUDE .java");
-        BufferedReader brinof = new BufferedReader(new InputStreamReader(System.in));
-        String fname = brinof.readLine();
-        FileSync fileSync = null;
-        try {
-            fileSync = new FileSync(String.valueOf(nowdir), fname);
-            fileSync.getFile();
-        } catch (IOException ioe) {
-            System.out.println("File Not Exist or other issue, backing to main menu");
-            render("mainmenu");
-        }
-        Editer editer = new Editer(fileSync.getCon());
-        editer.showtext();
-        switch (ops = filemenurender()) {
-            case "edit file": {
-                //TBD I do not do this because it's the part of GUI not for now
-            }
-            case "compile and run file": {
-                candrun(editer,fname);
-            }
-            case "mainmenu": {
-                render("mainmenu");
-            }
-        }
+    private void setProjectFileChooserConfig() {
+        projectFileChooser.setMultiSelectionEnabled(false);
+        projectFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        projectFileChooser.setAcceptAllFileFilterUsed(true);
     }
 
-    private void mainmenu() throws IOException, InterruptedException {
-        nowdir.setLength(0);
-        System.out.println("There are following files and directions in this folder\n");
-        Runtime runtimemainmenu = Runtime.getRuntime();
-        Process processmainmenu;
-        String os = System.getProperty("os.name");
-        if (os.toLowerCase().startsWith("win")) {
-            processmainmenu = runtimemainmenu.exec("cmd /c dir");
-        } else {
-            processmainmenu = runtimemainmenu.exec("ls");
-        }
-        System.out.println(getRes(processmainmenu,""));
-        System.out.println("Please choose following options\n");
-        BufferedReader brin = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("A.open file\nB.open direction\nC.edit dictionary");
-        System.out.println("please enter your options name, such as open file: ");
-        ops = brin.readLine();
-        render(ops);
+    private void setEditorPane(int index) {
+        editorPane.setText(pj.getSelectFile(index));
     }
 
-    private void opendir() throws IOException, InterruptedException {
-        System.out.println("Enter Name of the Direction");
-        BufferedReader brinof = new BufferedReader(new InputStreamReader(System.in));
-        String dirname = brinof.readLine();
-        String os = System.getProperty("os.name");
-        if (os.toLowerCase().startsWith("win")) {
-            nowdir.append(dirname).append("\\");
-        } else {
-            nowdir.append(dirname).append("\\");
-            String nowdirtmp = String.valueOf(nowdir).replaceAll("\\\\","/");
-            nowdir.setLength(0);
-            nowdir.append(nowdirtmp);
-        }
-        FileSync fileSync = null;
-        dirrender();
-        ops = getInputselector();
-        render(ops);
-    }
-
-    private String getInputselector() throws IOException {
-        System.out.println("Please choose following options\n");
-        BufferedReader brin = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("A.open file\nB.creat file\nC.open direction");
-        System.out.println("please enter your options name, such as open file: ");
-        ops = brin.readLine();
-        return ops;
-    }
-
-    private int dirrender() throws IOException, InterruptedException {
-        try {
-            System.out.println("There are following files and directions in this folder\n");
-            Runtime runtimediropen = Runtime.getRuntime();
-            Process processdiropen;
-            String os = System.getProperty("os.name");
-            String ndir = String.valueOf(nowdir);
-            if (os.toLowerCase().startsWith("win")) {
-                System.out.println(ndir);
-                processdiropen = runtimediropen.exec("cmd /c cd " + ndir + " & dir");
-            } else {
-                processdiropen = runtimediropen.exec("cd " + ndir + " && ls");
-            }
-            System.out.println(getRes(processdiropen,"Dir Not Exist or other issue, backing to main menu"));
-            return 0;
-        } catch (IOException ioe) {
-            System.out.println("Dir Not Exist or other issue, backing to main menu");
-            nowdir.setLength(0);
-            render("mainmenu");
-            return 0;
-        }
-    }
-
-    private String filemenurender() throws IOException {
-        System.out.println("Please choose following options\n");
-        BufferedReader brin = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("A.edit file\nB.compile and run file\nC.mainmenu");
-        System.out.println("please enter your options name, such as open file: ");
-        ops = brin.readLine();
-        return ops;
-    }
-
-    private void candrun(Editer editer, String fname) throws IOException, InterruptedException {
-        Convert convert = new Convert(editer.gettext(), "dict.txt");
-        convert.dictionaryConvert();
-        Compile compile = new Compile(convert.showResult(),String.valueOf(nowdir),fname);
-        System.out.println(compile.build());
-        System.out.println(compile.run());
-    }
-
-    private int dictruleadder() throws IOException, InterruptedException {
-        System.out.println("Please enter the Source of the rule or exit for exit");
-        BufferedReader dirod = new BufferedReader(new InputStreamReader(System.in));
-        String dirodt = dirod.readLine();
-        String source = "";
-        String result = "";
-        if (dirodt == "exit") {
-            System.out.println("Back to mainmenu");
-            render("mainmenu");
-            return 0;
-        } else {
-            source = dirodt;
-            System.out.println("Please enter the Source of the rule or exit for exit");
-            dirodt = dirod.readLine();
-            result = dirodt;
-        }
-        Convert convertdic = new Convert();
-        convertdic.addrule(source,result);
-        convertdic.dictionaryWritter("dict.txt");
-        render("mainmenu");
-        return 0;
-    }
 
 }

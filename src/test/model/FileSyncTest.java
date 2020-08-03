@@ -9,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class FileSyncTest {
-    @Test
+   /*   @Test
     //Test Project3
     //Open the File "test.java"
     //Changed the "main" to "主类"
     //Save the change, named testnew.java
 
-    void FileSyncTest() throws IOException {
+  void FileSyncTest() throws IOException {
         String testLoc = "data\\JavaProjectTest\\";
         FileSync testing = new FileSync(testLoc,"test");
         FileSync.getFile();
@@ -38,6 +38,6 @@ public class FileSyncTest {
                 "}\n"));
         assertEquals(testing.getCon(),testt.getCon());
 
-    }
+    }*/
 
 }

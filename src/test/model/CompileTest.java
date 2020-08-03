@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CompileTest {
+/*class CompileTest {
     // delete or rename this class!
     @Test
     //Test No.1
@@ -112,3 +112,4 @@ class CompileTest {
 
     }
 
+*/

@@ -17,7 +17,7 @@ public class FileSync {
     public FileSync(String loc,String filename) throws IOException {
         this.contain = new StringBuffer();
         this.location = loc;
-        this.filename = filename + ".java";
+        this.filename = filename;
     }
 
 
@@ -66,14 +66,14 @@ public class FileSync {
         inputS.close();
     }
 
-    public void setFile() throws IOException {
+    public void setFile(String fname) throws IOException {
         String os = System.getProperty("os.name");
         FileWriter fileWriter;
         if (os.toLowerCase().startsWith("win")) {
-            fileWriter = new FileWriter(location + filename);
+            fileWriter = new FileWriter(location + fname);
         } else {
             String loclinux = location.replaceAll("\\\\","/");
-            fileWriter = new FileWriter(loclinux + filename);
+            fileWriter = new FileWriter(loclinux + fname);
         }
 
         fileWriter.write(String.valueOf(contain));

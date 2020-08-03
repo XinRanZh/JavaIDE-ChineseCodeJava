@@ -9,11 +9,11 @@ public class Compile {
     String tmpLoc;
     String tmpfileName;
 
-    public Compile(StringBuffer stringBuffer, String tmpLoc, String fileName) throws IOException {
-        this.tmpText = stringBuffer;
-        this.tmpLoc = tmpLoc + "debug\\";
-        this.tmpfileName = fileName;
-        creatTmpFile();
+    public Compile(/*StringBuffer stringBuffer, String tmpLoc, String fileName*/) throws IOException {
+      //  this.tmpText = stringBuffer;
+      //  this.tmpLoc = tmpLoc + "debug\\";
+      //  this.tmpfileName = fileName;
+     //   creatTmpFile();
     }
 
     void creatTmpFile() throws IOException {
@@ -27,29 +27,24 @@ public class Compile {
     }
 
 
-    public String build() throws IOException, InterruptedException {
+    public String build(String command) throws IOException, InterruptedException {
         //javac is the command to build java class file
         //TBD:May change to javac -d . to build a whole project
         Runtime runtime = Runtime.getRuntime();
-        String os = System.getProperty("os.name");
         Process process;
-        if (os.toLowerCase().startsWith("win")) {
-            process = runtime.exec("javac " + tmpLoc + tmpfileName + ".java -J-Duser.language=en");
-        } else {
-            String tmpLoclinux = tmpLoc.replaceAll("\\\\","/");
-            process = runtime.exec("javac " + tmpLoclinux + tmpfileName + ".java -J-Duser.language=en");
-        }
+        process = runtime.exec("javac " + command + " -J-Duser.language=en");
+        System.out.println("javac " + command + " -J-Duser.language=en");
         return getRes(process,"Complie");
     }
 
-    public String run() throws IOException, InterruptedException {
+    public String run(String loc,String classname) throws IOException, InterruptedException {
         //java + packagename + classname is the order that make the .class or jar run
         Runtime runtimerun = Runtime.getRuntime();
         Process processrun;
         String os = System.getProperty("os.name");
         if (os.toLowerCase().startsWith("win")) {
             processrun = runtimerun.exec("cmd.exe /c cd "
-                    + tmpLoc + " & java -Duser.language=en " + tmpfileName);
+                    + loc + " & java -Duser.language=en " + classname);
         } else {
             String tmpLoclinux = tmpLoc.replaceAll("\\\\","/");
             processrun = runtimerun.exec("cd " + tmpLoclinux + " && java -Duser.language=en " + tmpfileName);

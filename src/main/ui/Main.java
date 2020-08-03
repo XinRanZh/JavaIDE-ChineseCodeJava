@@ -1,9 +1,5 @@
 package ui;
 
-import model.Compile;
-import model.Convert;
-import model.FileSync;
-
 import java.io.IOException;
 
 public class Main {
