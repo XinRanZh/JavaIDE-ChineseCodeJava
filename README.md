@@ -1,40 +1,27 @@
 # A Chinese-Java IDE 
 
-###For TA and Grader that using mac
-
-- The UI **DO NOT** support to run under mac
-- The core funtional code **MAY NOT** support mac <br>
-  Unfortunately, this core code have only been tested in Windows and Linux, For any OS that is not
-  Windows it will automatically running Linux version of code, considering that Mac Shell is a kind of 
-  Unix, it may or may not running successfully.
-- **I hava attached a video in the this project showing the test result in Windows**
-
 ### The CPSC210 Personal Project 
 
-Basically, the Chinese-Java IDE is a Java IDE but allow users to creat and edit 
-java code in their own language, like Chinese, I call this new language "Chinese Java"
+After studying for a long time, I finished this project
+First of all, I want to pay tribute to the predecessors of programmers who develop tools such as Eclipse and Idea. They have guided us along the way, and they have made the complexity simple, so that everyone has opportunity to programming.
+I developed a Java IDE. Of course, the functions of this IDE are still extremely weak compared to the existing mature commercial IDEs, but this IDE still conforms to the basic functions that an IDE should have: project management, editing, compilation and running. It's even enough to compile itself
 
-**In this version1, the IDE aimed to do follow "user stories"**
-- Convert "Chinese Java code" to general Java code
-- Compile and Run the code, get the output or error message
-- Allow user to add new rules to dictionary and use it to convert their code to java
-- Read existing java file or access other dir for openning file
 
-**In this version1, this program include some functions that do not included in the UI**
-- Creat a new file 
-- Creat a new dir
-- Select new dictionary
-- Convert and Compile "tool chain" allow cross platform running in Linux and Windows
+**This IDE (v2) has the following functions**
+- Manage a program formed by several classes with multiple levels and multiple package names on a project basis
+- Use dictionary files that can be edited by yourself to convert codes using keywords in other languages into standard English-based Java files, or redefine a keyword
+- Compile the entire project, and then run the specified class in a specified package
+- Cross plantform support in Windows and Linux
 
-**In the whole project, the "IDE" may have several limitations, include but not limited to**
-- This IDE cannot dealing with Debug or BreakPoint
-- May not be able to running in Mac, running in Linux is not guaranteed 
+**Due to limited time, some methods are not reflected in the UI in the program**
+- Dictionary management
+- Creat Project
 
-**In the version1, the "IDE" may have many limitation includes**
-- Now it only supports **ONE** single java file and this file should follow general law:
-same filename and class name, Running the ***main*** method
+**Listed function is in the plan of further development**
+- High-Light key word
+- A more useful editor
+- More user-friendly UI
+- Change information of project
 
-**In the future, this program will have**
-- Compile and run the whole project, include multi-package
-- A modern GUI
+
 

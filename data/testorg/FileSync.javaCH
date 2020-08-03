@@ -11,7 +11,7 @@ public class FileSync {
     public FileSync(StringBuffer con, String loc,String filename) {
         this.contain = con;
         this.location = loc;
-        this.filename = filename;
+        this.filename = filename + ".java";
     }
 
     public FileSync(String loc,String filename) throws IOException {

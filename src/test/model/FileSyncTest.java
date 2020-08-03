@@ -9,35 +9,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class FileSyncTest {
-   /*   @Test
-    //Test Project3
-    //Open the File "test.java"
-    //Changed the "main" to "主类"
-    //Save the change, named testnew.java
+     @Test
+
 
   void FileSyncTest() throws IOException {
-        String testLoc = "data\\JavaProjectTest\\";
-        FileSync testing = new FileSync(testLoc,"test");
+        String testLoc = "data\\test\\";
+        StringBuffer sb = new StringBuffer();
+        FileSync testing = new FileSync(sb,testLoc,"testFST.javaCH");
         FileSync.getFile();
         assertEquals(testLoc, testing.getLoc());
-        assertEquals("test.java",testing.getFilename());
-        StringBuffer sb = new StringBuffer();
-        sb.append(testing.getCon());
-        FileSync testnewing = new FileSync(sb,testLoc,"testnew");
-        testnewing.setFile();
-        FileSync testt = new FileSync(testLoc,"testnew");
-        testt.setFilename("abc");
-        testt.setFilename("testnew");
-        testt.setLoc(".\\");
-        testt.setLoc(testLoc);
-        testt.setFile();
-        testt.setCon(sb.append("权限公开 类 test{\n" +
-                "    权限公开 静态 无返回值 main(String[] args){\n" +
-                "        System.out.println(\"Hello, World!\");\n" +
+        assertEquals("testFST.javaCH",testing.getFilename());
+        assertEquals("public class test{\n" +
+                "    public static void main(String[] args){\n" +
+                "        System.out.println(\"Hello, worlllllllllllllllllld!\");\n" +
                 "    }\n" +
-                "}\n"));
-        assertEquals(testing.getCon(),testt.getCon());
+                "}\n",String.valueOf(testing.getCon()));
+        assertEquals(testLoc,testing.getLoc());
+        testing.setFilename("123");
+        assertEquals("123",testing.getFilename());
+        testing.setLoc("123");
+        assertEquals("123",testing.getLoc());
 
-    }*/
+    }
 
 }

@@ -26,7 +26,6 @@ public class Convert {
         dictionaryReader();
     }
 
-    //Read the dictionary and save the file to the lists
     void dictionaryReader() throws IOException {
         String os = System.getProperty("os.name");
         InputStream inputS;
@@ -50,7 +49,6 @@ public class Convert {
         inputS.close();
     }
 
-    //Write edited dictionary to file
     public void dictionaryWritter(String dictname) throws IOException {
         tmpDict = new StringBuffer();
         tmpDict.append(dictname + "\n");
@@ -73,7 +71,6 @@ public class Convert {
         fileWriter.close();
     }
 
-    //add an convert rule to the file
     public boolean addrule(String source,String result) {
         if (count <= 99) {
             dictSource[count - 1] = source;
@@ -101,7 +98,6 @@ public class Convert {
         return tmpText;
     }
 
-    //Output converted File
     public String getDicContain() {
         tmpDict = new StringBuffer();
         tmpDict.append(dictName + "\n");

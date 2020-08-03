@@ -2,114 +2,69 @@ package model;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/*class CompileTest {
+class CompileTest {
     // delete or rename this class!
     @Test
-    //Test No.1
-    //This whole test include:
-    //Step1: Open filename Given
-    //Step2: Convert This file from “Chinese-Java” to Java
-    //Step3: Compile and Run and catch the result: this file work successfully/compile error
-    void TestRunSuccess(){
-        String testLoc = "data\\JavaProjectTest\\";
-        FileSync testing = null;
-        try {
-            testing = new FileSync(testLoc,"test");
-        } catch (IOException e) {
-            e.printStackTrace();
+    void TestRunSuccess() throws IOException, InterruptedException {
+        String testLoc = "data\\test\\";
+        JavaFile javaFile = new JavaFile();
+        String os = System.getProperty("os.name");
+        if (!os.toLowerCase().startsWith("win")) {
+            testLoc = testLoc.replaceAll("\\\\","/");
         }
-        try {
-            FileSync.getFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        StringBuffer sb = testing.getCon();
-        Convert convert = null;
-        try {
-            convert = new Convert(sb,"dict.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        convert.dictionaryConvert();
-        Compile compile = null;
-        try {
-            compile = new Compile(convert.showResult(),testLoc,"test");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            assertEquals("Complie Success",compile.build());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            assertEquals("Hello, World!\nRun Success",compile.run());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        javaFile.setLocation(testLoc);
+        javaFile.setname("test");
+        javaFile.readFile();
+        javaFile.convertandOutPut("dict.txt");
+        FileSync fileSync = new FileSync(testLoc,"test.java");
+        fileSync.getFile();
+        assertEquals("public class test{\n" +
+                "    public static void main(String[] args){\n" +
+                "        System.out.println(\"Hello, worlllllllllllllllllld!\");\n" +
+                "    }\n" +
+                "}\n",String.valueOf(fileSync.getCon()));
+        Compile compile = new Compile();
+        assertEquals("Complie Success",compile.build(testLoc + "test.java"));
+        assertEquals("Hello, worlllllllllllllllllld!\n" +
+                "Run Success",compile.run(testLoc, "test"));
+
     }
 
     @Test
 
-    void TestComplieFailed(){
-        FileSync testing = null;
-        String testLoc = "data\\JavaProjectTest\\";
-        try {
-            testing = new FileSync(testLoc,"test");
-        } catch (IOException e) {
-            e.printStackTrace();
+    void TestComplieFailed() throws IOException, InterruptedException {
+        String testLoc = "data\\test\\";
+        JavaFile javaFile = new JavaFile();
+        String os = System.getProperty("os.name");
+        if (!os.toLowerCase().startsWith("win")) {
+            testLoc = testLoc.replaceAll("\\\\","/");
         }
-        try {
-            FileSync.getFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        StringBuffer sb = testing.getCon();
-        Convert convert = null;
-        try {
-            convert = new Convert(sb,"dict.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        convert.dictionaryConvert();
-        Compile compile = null;
-        try {
-            compile = new Compile(convert.showResult(),testLoc,"testcompilefailed");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            assertEquals("data\\JavaProjectTest\\debug\\testcompilefailed.java:1: error: class test is public, should be declared in a file named test.java\n" +
-                    "public class test{\n" +
-                    "       ^\n" +
-                    "1 error\n" +
-                    "Complie Failed",compile.build());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            assertEquals(
-                    "Error: Could not find or load main class testcompilefailed\n" +
-                    "Caused by: java.lang.ClassNotFoundException: testcompilefailed\n" +
-                    "Run Failed",compile.run());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        javaFile.setLocation(testLoc);
+        javaFile.setname("testfailed");
+        javaFile.readFile();
+        javaFile.convertandOutPut("dict.txt");
+        FileSync fileSync = new FileSync(testLoc,"testfailed.java");
+        fileSync.getFile();
+        assertEquals("public class testfailed{\n" +
+                "    public static void main(String[] args){\n" +
+                "        System.out.priasdfdasfsadfntln(\"Hello, worlllllllllllllllllld!\");\n" +
+                "    }\n" +
+                "}\n",String.valueOf(fileSync.getCon()));
+        Compile compile = new Compile();
+        assertEquals("data\\test\\testfailed.java:3: error: cannot find symbol\n" +
+                "        System.out.priasdfdasfsadfntln(\"Hello, worlllllllllllllllllld!\");\n" +
+                "                  ^\n" +
+                "  symbol:   method priasdfdasfsadfntln(String)\n" +
+                "  location: variable out of type PrintStream\n" +
+                "1 error\n" +
+                "Complie Failed",compile.build(testLoc + "testfailed.java"));
 }
 
 
     }
 
-*/

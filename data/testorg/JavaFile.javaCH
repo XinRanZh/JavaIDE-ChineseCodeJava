@@ -38,9 +38,16 @@ public class JavaFile {
         this.filename = filename;
     }
 
-    //public void addPakageName(String packagename) {
-    //    this.packagename.add(packagename);
-    //}
+    public void addPakageName(String packagename) {
+        this.packagename.add(packagename);
+    }
+
+    public void locationBuilder() {
+        location = "";
+        for (String s : packagename) {
+            location = location + s + "\\";
+        }
+    }
 
     public void setLocation(String location) {
         this.location = location;
