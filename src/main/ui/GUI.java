@@ -7,14 +7,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
 
 public class GUI {
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
 
     JFrame mainFrame = new JFrame("Spark IDE");
 
     JPanel mainPanel = new JPanel();
+
 
     JMenuBar mainMenu = new JMenuBar();
     JTextPane editorPane = new JTextPane();
@@ -42,35 +47,41 @@ public class GUI {
     int index;
 
     public GUI() {
-        mainFrame.setBounds(0,0,1280,720);
+
+
+        mainFrame.setBounds(0,0,screenSize.width,screenSize.height);
 
 
         mainPanel.setBackground(Color.white);
         mainPanel.setLayout(new BorderLayout());
 
         menuBuilder();
-        mainMenu.add(projectMenu);
-        mainMenu.add(bandrMenu);
-        mainMenu.add(saveMenu);
-        mainMenu.add(viewMenu);
+
 
         projectContainArea.insert("Not Opend Project Yet",0);
-        setOpenProject();
-        setBuildOnly();
-        setBuildandRun();
-        setSaveOnly();
-        setSaveandExit();
-        setchooseFile();
+        submenubuilder();
+
+
+        JScrollPane editorPanel = new JScrollPane(editorPane);
+        JScrollPane resPanel = new JScrollPane(resArea);
+        JScrollPane projectContainPanel = new JScrollPane(projectContainArea);
 
         mainPanel.add(mainMenu,BorderLayout.NORTH);
-        mainPanel.add(editorPane,BorderLayout.CENTER);
-        mainPanel.add(projectContainArea,BorderLayout.WEST);
-        mainPanel.add(resArea,BorderLayout.SOUTH);
+        mainPanel.add(editorPanel,BorderLayout.CENTER);
+        mainPanel.add(projectContainPanel,BorderLayout.WEST);
+        projectContainArea.setPreferredSize(new Dimension((int) (0.2 * (mainFrame.getSize().width)),
+                (int) (0.9 * (mainFrame.getSize().height))));
+        projectContainArea.setLineWrap(true);
+        mainPanel.add(resPanel,BorderLayout.SOUTH);
+        resArea.setPreferredSize(new Dimension((int) (0.8 * (mainFrame.getSize().width)),
+                (int) (0.2 * (mainFrame.getSize().height))));
+        resArea.setLineWrap(true);
 
         mainFrame.add(mainPanel);
 
-        mainFrame.setVisible(true);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setMainFrame();
+
+
     }
 
     private void menuBuilder() {
@@ -82,6 +93,19 @@ public class GUI {
         saveMenu.add(saveOnly);
         saveMenu.add(saveandExit);
         viewMenu.add(chooseFile);
+        mainMenu.add(projectMenu);
+        mainMenu.add(bandrMenu);
+        mainMenu.add(saveMenu);
+        mainMenu.add(viewMenu);
+    }
+
+    private void submenubuilder() {
+        setOpenProject();
+        setBuildOnly();
+        setBuildandRun();
+        setSaveOnly();
+        setSaveandExit();
+        setchooseFile();
     }
 
     private void setOpenProject() {
@@ -193,6 +217,20 @@ public class GUI {
 
     private void setEditorPane(int index) {
         editorPane.setText(pj.getSelectFile(index));
+    }
+
+    private void setMainFrame() {
+        mainFrame.addComponentListener(new ComponentAdapter() {
+            @Override public void componentResized(ComponentEvent e) {
+                resArea.setPreferredSize(new Dimension((int) (0.8 * (mainFrame.getSize().width)),
+                        (int) (0.2 * (mainFrame.getSize().height))));
+                projectContainArea.setPreferredSize(new Dimension((int) (0.2 * (mainFrame.getSize().width)),
+                        (int) (0.9 * (mainFrame.getSize().height))));
+            }
+        });
+        mainFrame.setVisible(true);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
 

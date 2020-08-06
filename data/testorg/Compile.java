@@ -77,4 +77,3 @@ public class Compile {
         return String.valueOf(resultText);
     }
 }
-
