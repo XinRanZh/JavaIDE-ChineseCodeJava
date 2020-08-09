@@ -70,6 +70,7 @@ public class FileSync {
         String os = System.getProperty("os.name");
         FileWriter fileWriter;
         if (os.toLowerCase().startsWith("win")) {
+            System.out.println(location + fname);
             fileWriter = new FileWriter(location + fname);
         } else {
             String loclinux = location.replaceAll("\\\\","/");

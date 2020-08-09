@@ -11,6 +11,7 @@ public class Project {
     private String startClassName;
     private String tmpLine;
     private String filename;
+    private StringBuffer projectText = new StringBuffer();
 
     JavaFile javaFile;
 
@@ -23,11 +24,11 @@ public class Project {
             String loclinux = location.replaceAll("\\\\","/");
             this.projectlocation = loclinux;
         }
-        this.projectlocation = location.substring(0,location.length() - name.length());
+        //this.projectlocation = location.substring(0,location.length() - name.length());
         this.projectname = name;
         this.listofClasses = new ArrayList<JavaFile>();
         if (creat) {
-            //creatNewProject();
+            creatNewProject();
         } else {
             openProject();
         }
@@ -44,7 +45,7 @@ public class Project {
 
     private void projectReader(BufferedReader reader) throws IOException {
         tmpLine = reader.readLine();
-        while (tmpLine != null) {
+        while (tmpLine != null && !tmpLine.equals("")) {
             switch (tmpLine) {
                 case "ProjectName":
                     tmpLine = reader.readLine();
@@ -122,4 +123,41 @@ public class Project {
         return true;
     }
 
+    public void creatNewProject() throws IOException {
+        projectText.append("ConfigStart\nProjectName\n");
+        projectText.append(this.filename + "\n");
+        writeProject();
+    }
+
+    public void writeProject() throws IOException {
+        FileSync fileSync = new FileSync(projectText,projectlocation + "\\",projectname);
+        fileSync.setFile(projectname + ".JCHprojectinfo");
+    }
+
+    public void addClass(String classname) {
+        javaFile = new JavaFile();
+        javaFile.setname(classname);
+        javaFile.setLocation(this.projectlocation);
+        this.listofClasses.add(javaFile);
+    }
+
+    public void setStartClassName(String className) {
+        this.startClassName = className;
+    }
+
+    public void generateProjectText() {
+        projectText = new StringBuffer();
+        projectText.append("ConfigStart\nProjectName\n");
+        projectText.append(this.filename + "\n");
+        projectText.append("StartClassName\n");
+        projectText.append(startClassName + "\n");
+        for (JavaFile className : listofClasses) {
+            projectText.append("FileInfo\n");
+            projectText.append(className.filename + "\n");
+        }
+    }
+
+    public void setProjectlocation(String projectlocation) {
+        this.projectlocation = projectlocation;
+    }
 }

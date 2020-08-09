@@ -1,5 +1,6 @@
 package ui;
 
+import com.sun.scenario.effect.impl.sw.java.JSWBlend_MULTIPLYPeer;
 import model.Compile;
 import model.Convert;
 import model.Project;
@@ -37,9 +38,10 @@ public class GUI {
 
     JMenuItem openProject = new JMenuItem("Open Project 打开工程");
     JFileChooser projectFileChooser = new JFileChooser();
-    JFileChooser dictionaryChooser = new JFileChooser();
     JMenuItem closeProject = new JMenuItem("Close Project 关闭工程");
     JMenuItem newProject = new JMenuItem("New Project 新建工程");
+    JFileChooser newProjectLocChooser = new JFileChooser();
+    JMenuItem addFiletoProject = new JMenuItem("Add File to Project 将文件加入工程");
     JMenuItem buildOnly = new JMenuItem("Build 仅构建");
     JMenuItem buildandRun = new JMenuItem("Build and Run 构建并运行");
     JMenuItem saveOnly = new JMenuItem("Save Only 仅保存");
@@ -47,8 +49,8 @@ public class GUI {
     JMenuItem chooseFile = new JMenuItem("Choose the File That need Edit 选择需要编辑的文件");
     JMenuItem refresh = new JMenuItem("Refresh 刷新文本");
     JMenuItem chooseDictionary = new JMenuItem("Choose Dictionary 选择字典");
+    JFileChooser dictionaryChooser = new JFileChooser();
     JMenuItem addrulestoDictionary = new JMenuItem("Add Rule to Dictionary 向字典中加入规则");
-
 
     Project pj;
     Compile cp;
@@ -103,6 +105,7 @@ public class GUI {
         projectMenu.add(openProject);
         projectMenu.add(closeProject);
         projectMenu.add(newProject);
+        projectMenu.add(addFiletoProject);
         bandrMenu.add(buildOnly);
         bandrMenu.add(buildandRun);
         dictionaryMenu.add(chooseDictionary);
@@ -129,6 +132,9 @@ public class GUI {
         setChooseDictionary();
         setAddrulestoDictionary();
         setRefresh();
+        setCloseProject();
+        setNewProject();
+        setAddFiletoProject();
     }
 
     private void setOpenProject() {
@@ -142,6 +148,8 @@ public class GUI {
                     try {
                         projectlocation = file.getCanonicalPath();
                         String projectConfigName = file.getName();
+                        projectlocation = projectlocation.substring(0,projectlocation.length()
+                                - projectConfigName.length());
                         pj = new Project(false,projectlocation,projectConfigName);
                         System.out.println(pj.getProjectlocation());
                         projectContainArea.setText(pj.getFileTree());
@@ -155,6 +163,62 @@ public class GUI {
         });
     }
 
+    private void setNewProject() {
+        newProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String newProjectLocation = "";
+                newProjectLocChooser.setMultiSelectionEnabled(false);
+                newProjectLocChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                newProjectLocChooser.setAcceptAllFileFilterUsed(true);
+                if (newProjectLocChooser.showOpenDialog(newProject) == JFileChooser.APPROVE_OPTION) {
+                    File file = newProjectLocChooser.getSelectedFile();
+                    try {
+                        newProjectLocation = file.getCanonicalPath();
+                        System.out.println(newProjectLocation);
+                        String s = JOptionPane.showInputDialog("Please Enter the Name of Project\n 请输入工程名称:");
+                        pj = new Project(true,newProjectLocation,s);
+                        projectContainArea.setText(pj.getFileTree());
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void setCloseProject() {
+        closeProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pj = null;
+                editorPane.setText("");
+                resArea.setText("");
+                projectContainArea.setText("Not Opend Project Yet");
+            }
+        });
+    }
+
+    private void setAddFiletoProject() {
+        addFiletoProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = JOptionPane.showInputDialog("Please Enter the Name of File"
+                        + "\n Do not include .javaCH"
+                        + "\n 请输入文件名称，不包括后缀名:");
+                pj.addClass(s);
+                pj.generateProjectText();
+                try {
+                    pj.writeProject();
+                    projectContainArea.setText(pj.getFileTree());
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+    }
+
+
     private void setBuildOnly() {
         buildOnly.addActionListener(new ActionListener() {
             @Override
@@ -162,10 +226,12 @@ public class GUI {
                 save();
                 try {
                     cp = new Compile();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                try {
+                    if (pj.ifNoStartClassName()) {
+                        String s = JOptionPane.showInputDialog("Please Enter the Start Class"
+                                + "\n Using Package Name + . + ClassName\n Such as UI.Main"
+                                + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
+                        pj.setStartClassName(s);
+                    }
                     pj.convertAll(convert);
                     String tmpRes = cp.build(pj.genCompileOrder());
                     resArea.setText(tmpRes);
@@ -184,13 +250,14 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    save();
+                    if (pj.ifNoStartClassName()) {
+                        String s = JOptionPane.showInputDialog("Please Enter the Start Class"
+                                + "\n Using Package Name + . + ClassName\n Such as UI.Main"
+                                + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
+                        pj.setStartClassName(s);
+                    }
                     cp = new Compile();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                try {
-                    System.out.println(pj.getProjectlocation());
-                    System.out.println(convert.getDictName() + convert.getLocation());
                     pj.convertAll(convert);
                     String tmpRes = cp.build(pj.genCompileOrder());
                     tmpRes = tmpRes + "\n" + cp.run(pj.getProjectlocation(),pj.getStartClassName());
@@ -344,6 +411,7 @@ public class GUI {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
+
 
 
 }

@@ -80,6 +80,7 @@ public class JavaFile {
     public void convertandOutPut(Convert convert) {
         try {
             readFile();
+            convert.setTmpText(this.fileContain);
             convert.dictionaryConvert();
             fileSync.setCon(convert.showResult());
             fileSync.setFile(filename + ".java");

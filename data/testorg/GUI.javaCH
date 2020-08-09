@@ -37,9 +37,9 @@ public class GUI {
 
     JMenuItem openProject = new JMenuItem("Open Project 打开工程");
     JFileChooser projectFileChooser = new JFileChooser();
-    JFileChooser dictionaryChooser = new JFileChooser();
     JMenuItem closeProject = new JMenuItem("Close Project 关闭工程");
     JMenuItem newProject = new JMenuItem("New Project 新建工程");
+    JFileChooser newProjectLocChooser = new JFileChooser();
     JMenuItem buildOnly = new JMenuItem("Build 仅构建");
     JMenuItem buildandRun = new JMenuItem("Build and Run 构建并运行");
     JMenuItem saveOnly = new JMenuItem("Save Only 仅保存");
@@ -47,6 +47,7 @@ public class GUI {
     JMenuItem chooseFile = new JMenuItem("Choose the File That need Edit 选择需要编辑的文件");
     JMenuItem refresh = new JMenuItem("Refresh 刷新文本");
     JMenuItem chooseDictionary = new JMenuItem("Choose Dictionary 选择字典");
+    JFileChooser dictionaryChooser = new JFileChooser();
     JMenuItem addrulestoDictionary = new JMenuItem("Add Rule to Dictionary 向字典中加入规则");
 
 
@@ -129,6 +130,8 @@ public class GUI {
         setChooseDictionary();
         setAddrulestoDictionary();
         setRefresh();
+        setCloseProject();
+        setNewProject();
     }
 
     private void setOpenProject() {
@@ -142,7 +145,9 @@ public class GUI {
                     try {
                         projectlocation = file.getCanonicalPath();
                         String projectConfigName = file.getName();
+                        projectlocation = projectlocation.substring(0,projectlocation.length() - projectConfigName.length());
                         pj = new Project(false,projectlocation,projectConfigName);
+                        System.out.println(pj.getProjectlocation());
                         projectContainArea.setText(pj.getFileTree());
                         index = 0;
                         setEditorPane(index);
@@ -153,6 +158,42 @@ public class GUI {
             }
         });
     }
+
+    private void setNewProject() {
+        newProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String newProjectLocation = "";
+                newProjectLocChooser.setMultiSelectionEnabled(false);
+                newProjectLocChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                newProjectLocChooser.setAcceptAllFileFilterUsed(true);
+                if (newProjectLocChooser.showOpenDialog(newProject) == JFileChooser.APPROVE_OPTION) {
+                    File file = newProjectLocChooser.getSelectedFile();
+                    try {
+                        newProjectLocation = file.getCanonicalPath();
+                        System.out.println(newProjectLocation);
+                        String s = JOptionPane.showInputDialog("Please Enter the Name of Project\n 请输入工程名称:");
+                        pj = new Project(true,newProjectLocation,s);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void setCloseProject() {
+        closeProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pj = null;
+                editorPane.setText("");
+                resArea.setText("");
+                projectContainArea.setText("");
+            }
+        });
+    }
+    
 
     private void setBuildOnly() {
         buildOnly.addActionListener(new ActionListener() {
@@ -182,13 +223,14 @@ public class GUI {
         buildandRun.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                save();
                 try {
                     cp = new Compile();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
                 try {
+                    System.out.println(pj.getProjectlocation());
+                    System.out.println(convert.getDictName() + convert.getLocation());
                     pj.convertAll(convert);
                     String tmpRes = cp.build(pj.genCompileOrder());
                     tmpRes = tmpRes + "\n" + cp.run(pj.getProjectlocation(),pj.getStartClassName());
@@ -269,6 +311,7 @@ public class GUI {
         chooseFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                save();
                 String s = JOptionPane.showInputDialog("Please enter the File's Number\n 请输入文件编号:");
                 index = Integer.valueOf(s);
                 System.out.println(index);
@@ -281,6 +324,7 @@ public class GUI {
         refresh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                save();
                 setEditorPane(index);
                 setHighlighter();
             }
@@ -340,6 +384,7 @@ public class GUI {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
+
 
 
 }

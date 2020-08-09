@@ -47,14 +47,16 @@ public class JavaFile {
         this.location = location;
     }
 
-    public void readFile() {
+    public boolean readFile() {
         try {
             fileSync = new FileSync(location,filename + ".javaCH");
             fileSync.getFile();
             setFileContain();
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public void setFile() {

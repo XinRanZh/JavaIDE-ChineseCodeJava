@@ -6,8 +6,6 @@ import java.io.*;
 public class Convert {
     //Convert Java Source from Chinese-Java Language to Normal Java Code
     //Edit the dictionary and get the rules from dictionary
-   //Test file save method 
-
 
     private StringBuffer tmpText;
     private StringBuffer tmpDict;
@@ -18,6 +16,7 @@ public class Convert {
         return dictName;
     }
     //TBD
+
     private String dictName;
 
     public String getLocation() {
@@ -39,7 +38,7 @@ public class Convert {
 
     public Convert() throws IOException {
         this.dictName = "dict.txt";
-        this.location = osdetector(".\\");
+        this.location = osdetector(".\\data\\");
         dictionaryReader();
     }
 
@@ -104,11 +103,15 @@ public class Convert {
         for (int n = 0; n < count - 1; n++) {
             String tmpString = tmpText.toString();
             tmpString = tmpString.replaceAll(dictSource[n],dictResult[n]);
+            System.out.println(dictSource[n]);
             StringBuffer sbtmp = new StringBuffer();
             sbtmp.append(tmpString);
-            tmpText = sbtmp;
-            //System.out.println("Replace" + dictSource[n] + "to" + dictResult[n]);
+            this.tmpText = sbtmp;
         }
+    }
+
+    public void setTmpText(StringBuffer stringBuffer) {
+        this.tmpText = stringBuffer;
     }
 
     public StringBuffer showResult() {
@@ -131,5 +134,17 @@ public class Convert {
 
     public String[] getDictSource() {
         return dictSource;
+    }
+
+    public void setDictSource(String[] strings) {
+        dictSource = strings;
+    }
+
+    public void setDictResult(String[] strings) {
+        dictResult = strings;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

@@ -11,23 +11,35 @@ public class Project {
     private String startClassName;
     private String tmpLine;
     private String filename;
+    private StringBuffer projectText = new StringBuffer();
 
     JavaFile javaFile;
+
+    private String osdetector(String loc) {
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            return loc;
+        } else {
+            String loclinux = loc.replaceAll("\\\\","/");
+            return loclinux;
+        }
+    }
 
     public Project(boolean creat,String location,String name) throws IOException {
         String os = System.getProperty("os.name");
         this.filename = name;
+        this.startClassName = null;
         if (os.toLowerCase().startsWith("win")) {
             this.projectlocation = location;
         } else {
             String loclinux = location.replaceAll("\\\\","/");
             this.projectlocation = loclinux;
         }
-        this.projectlocation = location.substring(0,location.length() - name.length());
+        //this.projectlocation = location.substring(0,location.length() - name.length());
         this.projectname = name;
         this.listofClasses = new ArrayList<JavaFile>();
         if (creat) {
-            //creatNewProject();
+            creatNewProject();
         } else {
             openProject();
         }
@@ -44,7 +56,7 @@ public class Project {
 
     private void projectReader(BufferedReader reader) throws IOException {
         tmpLine = reader.readLine();
-        while (tmpLine != null) {
+        while (tmpLine != null && !tmpLine.equals("")) {
             switch (tmpLine) {
                 case "ProjectName":
                     tmpLine = reader.readLine();
@@ -120,6 +132,57 @@ public class Project {
             return false;
         }
         return true;
+    }
+
+    public void creatNewProject() throws IOException {
+        projectText.append("ConfigStart\nProjectName\n");
+        projectText.append(this.filename + "\n");
+        writeProject();
+    }
+
+    public void writeProject() throws IOException {
+        FileSync fileSync = new FileSync(projectText,osdetector(projectlocation + "\\"),
+                projectname);
+        if (projectname.endsWith(".JCHprojectinfo")) {
+            fileSync.setFile(projectname);
+        } else {
+            fileSync.setFile(projectname + ".JCHprojectinfo");
+        }
+    }
+
+    public void addClass(String classname) {
+        javaFile = new JavaFile();
+        javaFile.setname(classname);
+        javaFile.setLocation(this.projectlocation);
+        if (javaFile.readFile()) {
+            this.listofClasses.add(javaFile);
+        } else {
+            javaFile.setFileContain("");
+            javaFile.setFile();
+            this.listofClasses.add(javaFile);
+        }
+    }
+
+    public void setStartClassName(String className) throws IOException {
+        this.startClassName = className;
+        generateProjectText();
+        writeProject();
+    }
+
+    public void generateProjectText() {
+        projectText = new StringBuffer();
+        projectText.append("ConfigStart\nProjectName\n");
+        projectText.append(this.filename + "\n");
+        projectText.append("StartClassName\n");
+        projectText.append(startClassName + "\n");
+        for (JavaFile className : listofClasses) {
+            projectText.append("FileInfo\n");
+            projectText.append(className.filename + "\n");
+        }
+    }
+
+    public boolean ifNoStartClassName() {
+        return this.startClassName.equals("null");
     }
 
 }
