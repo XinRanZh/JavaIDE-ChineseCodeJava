@@ -11,18 +11,41 @@ public class Convert {
     private StringBuffer tmpDict;
     private String[] dictSource = new String[100];
     private String[] dictResult = new String[100];
+
+    public String getDictName() {
+        return dictName;
+    }
     //TBD
+
     private String dictName;
+
+    public String getLocation() {
+        return location;
+    }
+
+    private String location;
     private int count = 0;
+
+    private String osdetector(String loc) {
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            return loc;
+        } else {
+            String loclinux = loc.replaceAll("\\\\","/");
+            return loclinux;
+        }
+    }
 
     public Convert() throws IOException {
         this.dictName = "dict.txt";
+        this.location = osdetector(".\\data\\");
         dictionaryReader();
     }
 
-    public Convert(StringBuffer stringBuffer, String dictName) throws IOException {
+    public Convert(StringBuffer stringBuffer, String dictName, String location) throws IOException {
         this.tmpText = stringBuffer;
         this.dictName = dictName;
+        this.location = location;
         dictionaryReader();
     }
 
@@ -30,11 +53,7 @@ public class Convert {
     void dictionaryReader() throws IOException {
         String os = System.getProperty("os.name");
         InputStream inputS;
-        if (os.toLowerCase().startsWith("win")) {
-            inputS = new FileInputStream(".\\data\\" + dictName);
-        } else {
-            inputS = new FileInputStream("data/" + dictName);
-        }
+        inputS = new FileInputStream(osdetector(this.location) + dictName);
         String tmpLine;
         count = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputS));
@@ -51,7 +70,7 @@ public class Convert {
     }
 
     //Write edited dictionary to file
-    public void dictionaryWritter(String dictname) throws IOException {
+    public void dictionaryWritter(String location, String dictname) throws IOException {
         tmpDict = new StringBuffer();
         tmpDict.append(dictname + "\n");
         for (int n = 0; n < count - 2; n++) {
@@ -61,14 +80,8 @@ public class Convert {
         tmpDict.append(dictSource[count - 2] + "\n");
         tmpDict.append(dictResult[count - 2]);
         //Make sure there is no blank last line
-        String os = System.getProperty("os.name");
         FileWriter fileWriter;
-        if (os.toLowerCase().startsWith("win")) {
-            fileWriter = new FileWriter(".\\data\\" + dictname);
-        } else {
-            fileWriter = new FileWriter("data/" + dictname);
-        }
-
+        fileWriter = new FileWriter(osdetector(location) + dictname);
         fileWriter.write(String.valueOf(tmpDict));
         fileWriter.close();
     }
@@ -90,11 +103,15 @@ public class Convert {
         for (int n = 0; n < count - 1; n++) {
             String tmpString = tmpText.toString();
             tmpString = tmpString.replaceAll(dictSource[n],dictResult[n]);
+            System.out.println(dictSource[n]);
             StringBuffer sbtmp = new StringBuffer();
             sbtmp.append(tmpString);
-            tmpText = sbtmp;
-            //System.out.println("Replace" + dictSource[n] + "to" + dictResult[n]);
+            this.tmpText = sbtmp;
         }
+    }
+
+    public void setTmpText(StringBuffer stringBuffer) {
+        this.tmpText = stringBuffer;
     }
 
     public StringBuffer showResult() {
@@ -113,5 +130,21 @@ public class Convert {
         tmpDict.append(dictSource[count - 2] + "\n");
         tmpDict.append(dictResult[count - 2]);
         return String.valueOf(tmpDict);
+    }
+
+    public String[] getDictSource() {
+        return dictSource;
+    }
+
+    public void setDictSource(String[] strings) {
+        dictSource = strings;
+    }
+
+    public void setDictResult(String[] strings) {
+        dictResult = strings;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

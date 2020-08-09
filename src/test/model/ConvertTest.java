@@ -49,6 +49,17 @@ public class ConvertTest {
             "int\n" +
             "返回\n" +
             "return";
+
+    private String osdetector(String loc) {
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            return loc;
+        } else {
+            String loclinux = loc.replaceAll("\\\\","/");
+            return loclinux;
+        }
+    }
+
     @Test
     void testDefaultDic() throws IOException {
         Convert convert = new Convert();
@@ -66,11 +77,32 @@ public class ConvertTest {
     //PS the convert do not need to test because the Convert-Compile-Run Tool chain have been checked in Compile test
     void testdictOps() throws IOException {
         StringBuffer sb = new StringBuffer();
-        Convert convert = new Convert(sb,"dict.txt");
+        Convert convert = new Convert(sb,"dict.txt",osdetector(".\\data\\"));
         convert.addrule("主类","main");
         assertEquals("dict.txt\n" + testdata + "\n主类\nmain",convert.getDicContain());//test added
-        convert.dictionaryWritter("dictnew.txt");
-        Convert convertnew = new Convert(sb,"dictnew.txt");
+        convert.dictionaryWritter(osdetector(".\\data\\"),"dictnew.txt");
+        Convert convertnew = new Convert(sb,"dictnew.txt",osdetector(".\\data\\"));
         assertEquals("dictnew.txt\n" + testdata + "\n主类\nmain",convertnew.getDicContain());//test added
     }
+
+    @Test
+    void testdicConvert() throws IOException {
+        StringBuffer sb = new StringBuffer();
+        sb.append("权限公开 类 test{\n" +
+                "    权限公开 静态 无返回值 main(String[] args){\n" +
+                "        System.out.println(\"Hello, World!\");\n" +
+                "    }\n" +
+                "}\n");
+
+        Convert convert = new Convert();
+        convert.setTmpText(sb);
+        convert.dictionaryConvert();
+        assertEquals("public class test{\n" +
+                "    public static void main(String[] args){\n" +
+                "        System.out.println(\"Hello, World!\");\n" +
+                "    }\n" +
+                "}\n",convert.showResult().toString());
+    }
+
+
 }

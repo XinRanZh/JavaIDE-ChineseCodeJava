@@ -13,9 +13,10 @@ public class JavaFile {
     Convert convert;
     StringBuffer fileContain;
 
-    public JavaFile(String filename,ArrayList<String> packagename) {
+    public JavaFile(String filename,ArrayList<String> packagename,Convert convert) {
         this.filename = filename;
         this.packagename = packagename;
+        this.convert = convert;
         location = "";
         for (String s : packagename) {
             location = location + s + "\\";
@@ -38,16 +39,9 @@ public class JavaFile {
         this.filename = filename;
     }
 
-    public void addPakageName(String packagename) {
-        this.packagename.add(packagename);
-    }
-
-    public void locationBuilder() {
-        location = "";
-        for (String s : packagename) {
-            location = location + s + "\\";
-        }
-    }
+    //public void addPakageName(String packagename) {
+    //    this.packagename.add(packagename);
+    //}
 
     public void setLocation(String location) {
         this.location = location;
@@ -83,10 +77,9 @@ public class JavaFile {
     }
 
 
-    public void convertandOutPut(String dictName) {
+    public void convertandOutPut(Convert convert) {
         try {
             readFile();
-            convert = new Convert(fileContain,dictName);
             convert.dictionaryConvert();
             fileSync.setCon(convert.showResult());
             fileSync.setFile(filename + ".java");

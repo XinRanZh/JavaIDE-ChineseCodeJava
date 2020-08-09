@@ -79,9 +79,9 @@ public class Project {
         return tmp.toString();
     }
 
-    public void convertAll(String dictname) {
+    public void convertAll(Convert convert) {
         for (JavaFile listofClass : listofClasses) {
-            listofClass.convertandOutPut(dictname);
+            listofClass.convertandOutPut(convert);
         }
     }
 

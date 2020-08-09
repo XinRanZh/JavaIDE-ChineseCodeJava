@@ -13,9 +13,10 @@ public class JavaFile {
     Convert convert;
     StringBuffer fileContain;
 
-    public JavaFile(String filename,ArrayList<String> packagename) {
+    public JavaFile(String filename,ArrayList<String> packagename,Convert convert) {
         this.filename = filename;
         this.packagename = packagename;
+        this.convert = convert;
         location = "";
         for (String s : packagename) {
             location = location + s + "\\";
@@ -76,10 +77,10 @@ public class JavaFile {
     }
 
 
-    public void convertandOutPut(String dictName) {
+    public void convertandOutPut(Convert convert) {
         try {
             readFile();
-            convert = new Convert(fileContain,dictName);
+            convert.setTmpText(this.fileContain);
             convert.dictionaryConvert();
             fileSync.setCon(convert.showResult());
             fileSync.setFile(filename + ".java");

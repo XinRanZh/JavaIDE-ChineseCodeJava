@@ -16,15 +16,6 @@ public class Compile {
      //   creatTmpFile();
     }
 
-    void creatTmpFile() throws IOException {
-        File tmploc = new File(tmpLoc);
-        File tmpFile = new File(tmpLoc, tmpfileName + ".java");
-        tmploc.mkdirs();
-        tmpFile.createNewFile();
-        FileWriter fileWriter = new FileWriter(tmpLoc + tmpfileName + ".java");
-        fileWriter.write(String.valueOf(tmpText));
-        fileWriter.close();
-    }
 
 
     public String build(String command) throws IOException, InterruptedException {
@@ -77,3 +68,4 @@ public class Compile {
         return String.valueOf(resultText);
     }
 }
+

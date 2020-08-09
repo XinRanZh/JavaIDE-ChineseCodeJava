@@ -2,9 +2,8 @@ package ui;
 
 import java.io.IOException;
 
-权限公开 类 Main {
+public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         GUI gui = new GUI();
-
     }
 }

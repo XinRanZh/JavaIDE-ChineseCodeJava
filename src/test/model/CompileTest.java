@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CompileTest {
     // delete or rename this class!
+    /*
     @Test
     void TestRunSuccess() throws IOException, InterruptedException {
         String testLoc = "data\\test\\";
@@ -20,7 +21,7 @@ class CompileTest {
         javaFile.setLocation(testLoc);
         javaFile.setname("test");
         javaFile.readFile();
-        javaFile.convertandOutPut("dict.txt");
+        javaFile.convertandOutPut(javaFile.convert);
         FileSync fileSync = new FileSync(testLoc,"test.java");
         fileSync.getFile();
         assertEquals("public class test{\n" +
@@ -65,6 +66,6 @@ class CompileTest {
                 "Complie Failed",compile.build(testLoc + "testfailed.java"));
 }
 
-
+*/
     }
 
