@@ -16,7 +16,7 @@ But I guess my project is good enough, at least in my eye.
 
 This simple and rudimentary IDE has most of the functions that a common IDE should have
 
-###Project Management
+###Project Management###
 - Open an exist Project
 - Creat a project in the folder
 - Add a class into this project
@@ -28,7 +28,7 @@ This simple and rudimentary IDE has most of the functions that a common IDE shou
 - When open a project, it will highlight the keyword
 - **Multi Media:** data/bg.png showed on the left of the Open Project Button
 
-###Dictionary Management
+###Dictionary Management###
 - Change the dictionary that using
 - Add a rule to the dictionary
 
@@ -36,7 +36,7 @@ This simple and rudimentary IDE has most of the functions that a common IDE shou
 - Default dictionary is in the data dir, called "dict.txt"
 - Charter set is locked at UTF-8
 
-###Build and Run Project
+###Build and Run Project###
 - Build the project but not run
 - Build and Run the project
 
@@ -45,11 +45,11 @@ This simple and rudimentary IDE has most of the functions that a common IDE shou
 - When running, it will detect if you already enter the start class name, if not, it will let you enter
 - Editing File will automatically saved before building
 
-###Save
+###Save###
 - Save editing file
 - Save and then exit
 
-###Change the file viewing
+###Change the file viewing###
 - Choose the file that need to be edit
 - Refresh the Highlight in the existing file
 

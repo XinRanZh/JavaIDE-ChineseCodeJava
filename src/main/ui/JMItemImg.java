@@ -11,6 +11,7 @@ public class JMItemImg extends JMenuItem {
         this.image = image;
     }
 
+    @Override
     public Insets getInsets() {
         Insets insets = (Insets)super.getInsets().clone();
         insets.left = insets.left + image.getWidth(null);
@@ -18,6 +19,7 @@ public class JMItemImg extends JMenuItem {
         return insets;
     }
 
+    @Override
     public void paint(Graphics graphics) {
         super.paint(graphics);
         if (!(image == null)) {
