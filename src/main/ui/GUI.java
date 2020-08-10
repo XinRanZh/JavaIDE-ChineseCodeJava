@@ -248,8 +248,8 @@ public class GUI {
         deleteFileFromProject.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String s = JOptionPane.showInputDialog("Please enter the class that need to be delete\n" +
-                        "请输入待删除的类名");
+                String s = JOptionPane.showInputDialog("Please enter the class that need to be delete\n"
+                        + "请输入待删除的类名");
                 if (pj.deleteClass(s)) {
                     JOptionPane.showMessageDialog(null,"Delete success 删除成功");
                     projectContainArea.setText(pj.getFileTree());

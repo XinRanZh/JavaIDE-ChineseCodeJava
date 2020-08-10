@@ -198,9 +198,9 @@ public class Project {
     }
 
     private void deletesame() {
-        for (int i=0;i<listofClasses.size();i++){
+        for (int i = 0;i < listofClasses.size();i++) {
             for (int n = i + 1; n < listofClasses.size(); n++) {
-                if (listofClasses.get(i).getFilename().equals(listofClasses.get(n).getFilename())){
+                if (listofClasses.get(i).getFilename().equals(listofClasses.get(n).getFilename())) {
                     listofClasses.remove(n);
 
                 }

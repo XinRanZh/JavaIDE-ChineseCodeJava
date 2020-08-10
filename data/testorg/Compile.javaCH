@@ -9,7 +9,7 @@ public class Compile {
     String tmpLoc;
     String tmpfileName;
 
-    public Compile(/*StringBuffer stringBuffer, String tmpLoc, String fileName*/) throws IOException {
+    public Compile(/*StringBuffer stringBuffer, String tmpLoc, String fileName*//*) throws IOException {
       //  this.tmpText = stringBuffer;
       //  this.tmpLoc = tmpLoc + "debug\\";
       //  this.tmpfileName = fileName;
