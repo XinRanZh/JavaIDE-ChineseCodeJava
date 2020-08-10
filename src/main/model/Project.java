@@ -2,14 +2,12 @@ package model;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Project {
     private String projectlocation;
     private String projectname;
     private ArrayList<JavaFile> listofClasses;
     private String startClassName;
-    private String tmpLine;
     private String filename;
     private StringBuffer projectText = new StringBuffer();
 
@@ -20,8 +18,7 @@ public class Project {
         if (os.toLowerCase().startsWith("win")) {
             return loc;
         } else {
-            String loclinux = loc.replaceAll("\\\\","/");
-            return loclinux;
+            return loc.replaceAll("\\\\","/");
         }
     }
 
@@ -32,12 +29,11 @@ public class Project {
         if (os.toLowerCase().startsWith("win")) {
             this.projectlocation = location;
         } else {
-            String loclinux = location.replaceAll("\\\\","/");
-            this.projectlocation = loclinux;
+            this.projectlocation = location.replaceAll("\\\\","/");
         }
         //this.projectlocation = location.substring(0,location.length() - name.length());
         this.projectname = name;
-        this.listofClasses = new ArrayList<JavaFile>();
+        this.listofClasses = new ArrayList<>();
         if (creat) {
             creatNewProject();
         } else {
@@ -55,7 +51,7 @@ public class Project {
     }
 
     private void projectReader(BufferedReader reader) throws IOException {
-        tmpLine = reader.readLine();
+        String tmpLine = reader.readLine();
         while (tmpLine != null && !tmpLine.equals("")) {
             switch (tmpLine) {
                 case "ProjectName":
@@ -111,7 +107,7 @@ public class Project {
         sb.append("Project Name:").append(this.projectname).append("\n");
         sb.append("Project Location:").append(this.projectlocation).append("\n");
         for (JavaFile listofClass : listofClasses) {
-            sb.append("No" + n + ":");
+            sb.append("No").append(n).append(":");
             sb.append(listofClass.filename);
             sb.append("\n");
             n++;
@@ -136,7 +132,7 @@ public class Project {
 
     public void creatNewProject() throws IOException {
         projectText.append("ConfigStart\nProjectName\n");
-        projectText.append(this.projectname + "\n");
+        projectText.append(this.projectname).append("\n");
         writeProject();
     }
 
@@ -183,13 +179,13 @@ public class Project {
     public void generateProjectText() {
         projectText = new StringBuffer();
         projectText.append("ConfigStart\nProjectName\n");
-        projectText.append(this.filename + "\n");
+        projectText.append(this.filename).append("\n");
         projectText.append("StartClassName\n");
-        projectText.append(startClassName + "\n");
+        projectText.append(startClassName).append("\n");
         deletesame();
         for (JavaFile className : listofClasses) {
             projectText.append("FileInfo\n");
-            projectText.append(className.filename + "\n");
+            projectText.append(className.filename).append("\n");
         }
     }
 
