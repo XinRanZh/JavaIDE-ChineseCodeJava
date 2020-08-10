@@ -136,15 +136,4 @@ public class Convert {
         return dictSource;
     }
 
-    public void setDictSource(String[] strings) {
-        dictSource = strings;
-    }
-
-    public void setDictResult(String[] strings) {
-        dictResult = strings;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
 }

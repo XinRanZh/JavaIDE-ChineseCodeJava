@@ -55,7 +55,7 @@ public class FileSync {
             inputS = new FileInputStream(loclinux + filename);
         }
         String tmpLine;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputS));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputS,"UTF-8"));
         tmpLine = reader.readLine();
         while (tmpLine != null) {
             contain.append(tmpLine);

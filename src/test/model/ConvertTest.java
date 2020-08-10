@@ -102,6 +102,14 @@ public class ConvertTest {
                 "        System.out.println(\"Hello, World!\");\n" +
                 "    }\n" +
                 "}\n",convert.showResult().toString());
+        assertEquals("dict.txt",convert.getDictName());
+    }
+
+    @Test
+    void testGetDicSourceandLocation() throws IOException {
+        Convert convert = new Convert();
+        convert.getDictSource();
+        assertEquals(".\\data\\",convert.getLocation());
     }
 
 

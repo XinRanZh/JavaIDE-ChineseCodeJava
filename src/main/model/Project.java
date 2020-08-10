@@ -73,13 +73,12 @@ public class Project {
             tmpLine = reader.readLine();
         }
     }
-                    /*case "PackageName":
-                    tmpLine = reader.readLine();
-                    javaFile.addPakageName(tmpLine);
-                    break;*/
 
 
     public String genCompileOrder() {
+        if (ifNoStartClassName()) {
+            System.out.println("NO START CLASS NAME WARNING");
+        }
         StringBuilder tmp = new StringBuilder("-d " + projectlocation + " ");
         for (JavaFile listofClass : listofClasses) {
             tmp.append(projectlocation).append(listofClass.filename).append(".java").append(" ");

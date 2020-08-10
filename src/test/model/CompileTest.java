@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,15 +14,15 @@ class CompileTest {
     @Test
     void TestRunSuccess() throws IOException, InterruptedException {
         String testLoc = "data\\test\\";
-        JavaFile javaFile = new JavaFile();
+        JavaFile javaFile = new JavaFile(testLoc,new ArrayList<>(),new Convert());
         String os = System.getProperty("os.name");
         if (!os.toLowerCase().startsWith("win")) {
             testLoc = testLoc.replaceAll("\\\\","/");
         }
+        Convert convert = new Convert();
         javaFile.setLocation(testLoc);
         javaFile.setname("test");
         javaFile.readFile();
-        Convert convert = new Convert();
         javaFile.convertandOutPut(convert);
         FileSync fileSync = new FileSync(testLoc,"test.java");
         fileSync.getFile();
@@ -32,8 +33,7 @@ class CompileTest {
                 "}\n",String.valueOf(fileSync.getCon()));
         Compile compile = new Compile();
         assertEquals("Complie Success",compile.build(testLoc + "test.java"));
-        assertEquals("Hello, worlllllllllllllllllld!\n" +
-                "Run Success",compile.run(testLoc, "test"));
+        assertEquals("Hello, worlllllllllllllllllld!\nRun Success",compile.run(testLoc,"test"));
 
     }
 

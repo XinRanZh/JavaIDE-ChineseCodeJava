@@ -1,6 +1,7 @@
 package model;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class ProjectTest {
                 "    String tmpLoc;\n" +
                 "    String tmpfileName;\n" +
                 "\n" +
-                "    public Compile(/*StringBuffer stringBuffer, String tmpLoc, String fileName*/) throws IOException {\n" +
+                "    public Compile(/*StringBuffer stringBuffer, String tmpLoc, String fileName*//*) throws IOException {\n" +
                 "      //  this.tmpText = stringBuffer;\n" +
                 "      //  this.tmpLoc = tmpLoc + \"debug\\\\\";\n" +
                 "      //  this.tmpfileName = fileName;\n" +
@@ -200,7 +201,46 @@ public class ProjectTest {
                 "}\n");
         assertEquals("ui.Main",project.getStartClassName());
         assertEquals("data\\testorg\\",project.getProjectlocation());
+        project.deleteClass("Compile");
+        project.generateProjectText();
+        project.writeProject();
+        assertEquals("Project Name:Main\n" +
+                "Project Location:data\\testorg\\\n" +
+                "No0:Convert\n" +
+                "No1:FileSync\n" +
+                "No2:GUI\n" +
+                "No3:JavaFile\n" +
+                "No4:Main\n" +
+                "No5:Project\n",project.getFileTree());
+        project.addClass("Compile");
+        project.generateProjectText();
+        project.writeProject();
+        assertEquals("Project Name:Main\n" +
+                "Project Location:data\\testorg\\\n" +
+                "No0:Convert\n" +
+                "No1:FileSync\n" +
+                "No2:GUI\n" +
+                "No3:JavaFile\n" +
+                "No4:Main\n" +
+                "No5:Project\n" +
+                "No6:Compile\n",project.getFileTree());
     }
 
+    @Test
+    void testCreateProject() throws IOException {
+        Project project = new Project(true,".\\data\\","ts");
+        String os = System.getProperty("os.name");
+        String tmploc;
+        if (os.toLowerCase().startsWith("win")) {
+            tmploc = ".\\data\\";
+        } else {
+            tmploc = "./data/";
+        }
+        File file = new File(tmploc + "ts.JCHprojectinfo");
+        assertTrue(file.exists());
+        project.setStartClassName("tmp");
+        assertEquals("tmp",project.getStartClassName());
+
+    }
 
 }
