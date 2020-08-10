@@ -10,9 +10,11 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
+import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
@@ -37,7 +39,7 @@ public class GUI {
     JMenu viewMenu = new JMenu("View 查看");
     JMenu dictionaryMenu = new JMenu("Dictionary 字典设置");
 
-    JMenuItem openProject = new JMenuItem("Open Project 打开工程");
+    JMenuItem openProject;
     JFileChooser projectFileChooser = new JFileChooser();
     JMenuItem closeProject = new JMenuItem("Close Project 关闭工程");
     JMenuItem newProject = new JMenuItem("New Project 新建工程");
@@ -59,6 +61,7 @@ public class GUI {
     Compile cp;
     int index;
     Convert convert;
+    ImageIcon imageIcon;
 
     private String osdetector(String loc) {
         String os = System.getProperty("os.name");
@@ -71,10 +74,9 @@ public class GUI {
     }
 
     public GUI() throws IOException {
-
+        imageIcon = new ImageIcon(osdetector(".\\data\\bg.png"));
         mainFrame.setBounds(0,0,screenSize.width,screenSize.height);
-
-        mainPanel.setBackground(Color.white);
+        mainPanel.setOpaque(false);
         mainPanel.setLayout(new BorderLayout());
         menuBuilder();
 
@@ -96,14 +98,12 @@ public class GUI {
                 (int) (0.2 * (mainFrame.getSize().height))));
         resArea.setLineWrap(true);
 
-        mainFrame.add(mainPanel);
-
         setMainFrame();
-
 
     }
 
     private void menuBuilder() {
+        openProject = new JMItemImg("Open Project 打开工程",imageIcon.getImage());
         projectMenu.add(openProject);
         projectMenu.add(closeProject);
         projectMenu.add(newProject);
@@ -448,6 +448,8 @@ public class GUI {
                         (int) (0.9 * (mainFrame.getSize().height))));
             }
         });
+        Container c = mainFrame.getContentPane();
+        c.add(mainPanel);
         mainFrame.setVisible(true);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
