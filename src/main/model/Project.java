@@ -156,10 +156,18 @@ public class Project {
         javaFile.setLocation(this.projectlocation);
         if (javaFile.readFile()) {
             this.listofClasses.add(javaFile);
+            if (listofClasses.size() >= 2) {
+                generateProjectText();
+                writeProject();
+            }
         } else {
             javaFile.setFileContain("");
             javaFile.setFile();
             this.listofClasses.add(javaFile);
+            if (listofClasses.size() >= 2) {
+                generateProjectText();
+                writeProject();
+            }
         }
         FileInputStream inputS = new FileInputStream(projectlocation + filename);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputS));
@@ -178,14 +186,30 @@ public class Project {
         projectText.append(this.filename + "\n");
         projectText.append("StartClassName\n");
         projectText.append(startClassName + "\n");
+        deletesame();
         for (JavaFile className : listofClasses) {
             projectText.append("FileInfo\n");
             projectText.append(className.filename + "\n");
         }
     }
 
+    public boolean deleteClass(String classname) {
+        return listofClasses.removeIf(classes -> classes.getFilename().equals(classname));
+    }
+
     public boolean ifNoStartClassName() {
         return this.startClassName.equals("*notSetYet*");
+    }
+
+    private void deletesame() {
+        for (int i=0;i<listofClasses.size();i++){
+            for (int n = i + 1; n < listofClasses.size(); n++) {
+                if (listofClasses.get(i).getFilename().equals(listofClasses.get(n).getFilename())){
+                    listofClasses.remove(n);
+
+                }
+            }
+        }
     }
 
 }

@@ -42,6 +42,8 @@ public class GUI {
     JMenuItem newProject = new JMenuItem("New Project 新建工程");
     JFileChooser newProjectLocChooser = new JFileChooser();
     JMenuItem addFiletoProject = new JMenuItem("Add File to Project 将文件加入工程");
+    JMenuItem deleteFileFromProject = new JMenuItem("Delete File from Project 从工程中删除文件");
+    JMenuItem setStartClassName = new JMenuItem("Set the Start Class Name 更改启动类的名称");
     JMenuItem buildOnly = new JMenuItem("Build 仅构建");
     JMenuItem buildandRun = new JMenuItem("Build and Run 构建并运行");
     JMenuItem saveOnly = new JMenuItem("Save Only 仅保存");
@@ -106,6 +108,8 @@ public class GUI {
         projectMenu.add(closeProject);
         projectMenu.add(newProject);
         projectMenu.add(addFiletoProject);
+        projectMenu.add(setStartClassName);
+        projectMenu.add(deleteFileFromProject);
         bandrMenu.add(buildOnly);
         bandrMenu.add(buildandRun);
         dictionaryMenu.add(chooseDictionary);
@@ -135,6 +139,8 @@ public class GUI {
         setCloseProject();
         setNewProject();
         setAddFiletoProject();
+        setSetStartClassName();
+        setDeleteFileFromProject();
     }
 
     private void setOpenProject() {
@@ -222,6 +228,37 @@ public class GUI {
         });
     }
 
+    private void setSetStartClassName() {
+        setStartClassName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = JOptionPane.showInputDialog("Please Enter the Start Class"
+                        + "\n Using Package Name + . + ClassName\n Such as UI.Main"
+                        + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
+                try {
+                    pj.setStartClassName(s);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void setDeleteFileFromProject() {
+        deleteFileFromProject.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = JOptionPane.showInputDialog("Please enter the class that need to be delete\n" +
+                        "请输入待删除的类名");
+                if (pj.deleteClass(s)) {
+                    JOptionPane.showMessageDialog(null,"Delete success 删除成功");
+                    projectContainArea.setText(pj.getFileTree());
+                } else {
+                    JOptionPane.showMessageDialog(null,"Class not exist 工程内没有这个类");
+                }
+            }
+        });
+    }
 
     private void setBuildOnly() {
         buildOnly.addActionListener(new ActionListener() {

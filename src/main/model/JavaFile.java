@@ -52,9 +52,11 @@ public class JavaFile {
             fileSync = new FileSync(location,filename + ".javaCH");
             fileSync.getFile();
             setFileContain();
+            System.out.println("Found");
             return true;
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Not Found");
             return false;
         }
     }
@@ -90,6 +92,10 @@ public class JavaFile {
             e.printStackTrace();
         }
 
+    }
+
+    public String getFilename() {
+        return this.filename;
     }
 
 }
