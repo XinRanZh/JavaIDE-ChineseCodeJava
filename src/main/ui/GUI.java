@@ -13,6 +13,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -75,7 +76,6 @@ public class GUI {
 
         mainPanel.setBackground(Color.white);
         mainPanel.setLayout(new BorderLayout());
-
         menuBuilder();
 
         projectContainArea.insert("Not Opend Project Yet",0);

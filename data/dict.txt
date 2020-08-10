@@ -1,4 +1,4 @@
-dict.txt
+﻿dict.txt
 抽象
 abstract
 断言

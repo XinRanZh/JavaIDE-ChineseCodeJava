@@ -7,24 +7,23 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProjectTest {
-    /*
+
     @Test
     void testProject() throws IOException {
-        String testLoc = "data\\testorg\\test.jCHprojectinfo";
+        String testLoc = "data\\testorg\\";
         String os = System.getProperty("os.name");
         if (!os.toLowerCase().startsWith("win")) {
             testLoc = testLoc.replaceAll("\\\\","/");
         }
         Project project = new Project(false,testLoc,"test.jCHprojectinfo");
         project.openProject();
-        assertEquals("-d data\\testorg\\ data\\testorg\\Compile.java data\\testorg" +
-                "\\Convert.java data\\testorg\\Editer.java data\\testorg\\FileSync.java data" +
-                "\\testorg\\GUI.java data\\testorg\\JavaFile.java data\\testorg\\Main.java data" +
-                "\\testorg\\Project.java data\\testorg\\Compile.java data\\testorg\\Convert.java data" +
-                "\\testorg\\Editer.java data\\testorg\\FileSync.java data\\testorg\\GUI.java data\\testorg" +
-                "\\JavaFile.java data" +
-                "\\testorg\\Main.java data\\testorg\\Project.java ",project.genCompileOrder());
-        project.convertAll("dict.txt");
+        assertEquals("-d data\\testorg\\ data\\testorg\\Compile.java" +
+                " data\\testorg\\Convert.java data\\testorg\\FileSync.java data\\" +
+                "testorg\\GUI.java data\\testorg\\JavaFile.java data\\testorg\\Main.java" +
+                " data\\testorg\\Project.java data\\testorg\\Compile.java data\\testorg\\" +
+                "Convert.java data\\testorg\\FileSync.java data\\testorg\\GUI.java data\\" +
+                "testorg\\JavaFile.java data\\testorg\\Main.java data\\testorg\\Project.java ",project.genCompileOrder());
+        project.convertAll(new Convert());
         assertEquals("package model;\n" +
                 "\n" +
                 "import java.io.*;\n" +
@@ -36,7 +35,7 @@ public class ProjectTest {
                 "    String tmpLoc;\n" +
                 "    String tmpfileName;\n" +
                 "\n" +
-                "    public Compile(/*StringBuffer stringBuffer, String tmpLoc, String fileName*//*) throws IOException {\n" +
+                "    public Compile(/*StringBuffer stringBuffer, String tmpLoc, String fileName*/) throws IOException {\n" +
                 "      //  this.tmpText = stringBuffer;\n" +
                 "      //  this.tmpLoc = tmpLoc + \"debug\\\\\";\n" +
                 "      //  this.tmpfileName = fileName;\n" +
@@ -103,26 +102,23 @@ public class ProjectTest {
                 "        process.destroy();\n" +
                 "        return String.valueOf(resultText);\n" +
                 "    }\n" +
-                "}\n" +
-                "\n",project.getSelectFile(0));
+                "}\n",project.getSelectFile(0));
         assertEquals("Project Name:Main\n" +
                 "Project Location:data\\testorg\\\n" +
                 "No0:Compile\n" +
                 "No1:Convert\n" +
-                "No2:Editer\n" +
-                "No3:FileSync\n" +
-                "No4:GUI\n" +
-                "No5:JavaFile\n" +
-                "No6:Main\n" +
-                "No7:Project\n" +
-                "No8:Compile\n" +
-                "No9:Convert\n" +
-                "No10:Editer\n" +
-                "No11:FileSync\n" +
-                "No12:GUI\n" +
-                "No13:JavaFile\n" +
-                "No14:Main\n" +
-                "No15:Project\n",project.getFileTree());
+                "No2:FileSync\n" +
+                "No3:GUI\n" +
+                "No4:JavaFile\n" +
+                "No5:Main\n" +
+                "No6:Project\n" +
+                "No7:Compile\n" +
+                "No8:Convert\n" +
+                "No9:FileSync\n" +
+                "No10:GUI\n" +
+                "No11:JavaFile\n" +
+                "No12:Main\n" +
+                "No13:Project\n",project.getFileTree());
         project.setSelectFile(0,"package model;\n" +
                 "\n" +
                 "import java.io.*;\n" +
@@ -205,6 +201,6 @@ public class ProjectTest {
         assertEquals("ui.Main",project.getStartClassName());
         assertEquals("data\\testorg\\",project.getProjectlocation());
     }
-    */
+
 
 }

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CompileTest {
     // delete or rename this class!
-    /*
+
     @Test
     void TestRunSuccess() throws IOException, InterruptedException {
         String testLoc = "data\\test\\";
@@ -21,7 +21,8 @@ class CompileTest {
         javaFile.setLocation(testLoc);
         javaFile.setname("test");
         javaFile.readFile();
-        javaFile.convertandOutPut(javaFile.convert);
+        Convert convert = new Convert();
+        javaFile.convertandOutPut(convert);
         FileSync fileSync = new FileSync(testLoc,"test.java");
         fileSync.getFile();
         assertEquals("public class test{\n" +
@@ -45,10 +46,11 @@ class CompileTest {
         if (!os.toLowerCase().startsWith("win")) {
             testLoc = testLoc.replaceAll("\\\\","/");
         }
+        Convert convert = new Convert();
         javaFile.setLocation(testLoc);
         javaFile.setname("testfailed");
         javaFile.readFile();
-        javaFile.convertandOutPut("dict.txt");
+        javaFile.convertandOutPut(convert);
         FileSync fileSync = new FileSync(testLoc,"testfailed.java");
         fileSync.getFile();
         assertEquals("public class testfailed{\n" +
@@ -66,6 +68,6 @@ class CompileTest {
                 "Complie Failed",compile.build(testLoc + "testfailed.java"));
 }
 
-*/
+
     }
 

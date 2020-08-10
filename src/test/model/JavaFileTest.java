@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class JavaFileTest {
-   /* @Test
-    void testJavaFile(){
+    @Test
+    void testJavaFile() throws IOException {
         String testLoc = "data\\test\\";
         String os = System.getProperty("os.name");
         if (!os.toLowerCase().startsWith("win")) {
@@ -18,7 +18,7 @@ public class JavaFileTest {
         }
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("fadsafdsadsfasdf");
-        JavaFile javaFilex = new JavaFile("testJF",arrayList);
+        JavaFile javaFilex = new JavaFile("testJF",arrayList,new Convert());
         javaFilex.setLocation(testLoc);
         javaFilex.readFile();
         javaFilex.setFileContain("public class test{\n" +
@@ -35,5 +35,5 @@ public class JavaFileTest {
                 "}\n",String.valueOf(javaFilex.fileContain));
     }
 
-    */
+
 }

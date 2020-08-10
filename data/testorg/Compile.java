@@ -16,16 +16,24 @@ public class Compile {
      //   creatTmpFile();
     }
 
+    void creatTmpFile() throws IOException {
+        File tmploc = new File(tmpLoc);
+        File tmpFile = new File(tmpLoc, tmpfileName + ".java");
+        tmploc.mkdirs();
+        tmpFile.createNewFile();
+        FileWriter fileWriter = new FileWriter(tmpLoc + tmpfileName + ".java");
+        fileWriter.write(String.valueOf(tmpText));
+        fileWriter.close();
+    }
 
 
     public String build(String command) throws IOException, InterruptedException {
         //javac is the command to build java class file
-        //-encoding UTF-8
         //TBD:May change to javac -d . to build a whole project
         Runtime runtime = Runtime.getRuntime();
         Process process;
         process = runtime.exec("javac -encoding UTF-8 " + command + " -J-Duser.language=en");
-        System.out.println("javac -encoding UTF-8 " + command + " -J-Duser.language=en");
+        System.out.println("javac " + command + " -J-Duser.language=en");
         return getRes(process,"Complie");
     }
 
@@ -36,7 +44,7 @@ public class Compile {
         String os = System.getProperty("os.name");
         if (os.toLowerCase().startsWith("win")) {
             processrun = runtimerun.exec("cmd.exe /c cd "
-                    + loc + " & java -Duser.language=en -Dfile.encoding=UTF-8 " + classname);
+                    + loc + " & java -Duser.language=en " + classname);
         } else {
             String tmpLoclinux = tmpLoc.replaceAll("\\\\","/");
             processrun = runtimerun.exec("cd " + tmpLoclinux + " && java -Duser.language=en " + tmpfileName);
@@ -69,4 +77,3 @@ public class Compile {
         return String.valueOf(resultText);
     }
 }
-
