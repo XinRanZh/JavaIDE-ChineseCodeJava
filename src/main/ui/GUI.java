@@ -174,7 +174,7 @@ public class GUI {
                 if (newProjectLocChooser.showOpenDialog(newProject) == JFileChooser.APPROVE_OPTION) {
                     File file = newProjectLocChooser.getSelectedFile();
                     try {
-                        newProjectLocation = file.getCanonicalPath();
+                        newProjectLocation = file.getCanonicalPath() + "\\";
                         System.out.println(newProjectLocation);
                         String s = JOptionPane.showInputDialog("Please Enter the Name of Project\n 请输入工程名称:");
                         pj = new Project(true,newProjectLocation,s);
@@ -206,7 +206,11 @@ public class GUI {
                 String s = JOptionPane.showInputDialog("Please Enter the Name of File"
                         + "\n Do not include .javaCH"
                         + "\n 请输入文件名称，不包括后缀名:");
-                pj.addClass(s);
+                try {
+                    pj.addClass(s);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
                 pj.generateProjectText();
                 try {
                     pj.writeProject();

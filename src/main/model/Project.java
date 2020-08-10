@@ -28,7 +28,7 @@ public class Project {
     public Project(boolean creat,String location,String name) throws IOException {
         String os = System.getProperty("os.name");
         this.filename = name;
-        this.startClassName = null;
+        this.startClassName = "*notSetYet*";
         if (os.toLowerCase().startsWith("win")) {
             this.projectlocation = location;
         } else {
@@ -136,21 +136,21 @@ public class Project {
 
     public void creatNewProject() throws IOException {
         projectText.append("ConfigStart\nProjectName\n");
-        projectText.append(this.filename + "\n");
+        projectText.append(this.projectname + "\n");
         writeProject();
     }
 
     public void writeProject() throws IOException {
-        FileSync fileSync = new FileSync(projectText,osdetector(projectlocation + "\\"),
-                projectname);
-        if (projectname.endsWith(".JCHprojectinfo")) {
-            fileSync.setFile(projectname);
+        FileSync fileSync = new FileSync(projectText,osdetector(projectlocation),
+                filename);
+        if (filename.endsWith(".JCHprojectinfo")) {
+            fileSync.setFile(filename);
         } else {
-            fileSync.setFile(projectname + ".JCHprojectinfo");
+            fileSync.setFile(filename + ".JCHprojectinfo");
         }
     }
 
-    public void addClass(String classname) {
+    public void addClass(String classname) throws IOException {
         javaFile = new JavaFile();
         javaFile.setname(classname);
         javaFile.setLocation(this.projectlocation);
@@ -161,6 +161,9 @@ public class Project {
             javaFile.setFile();
             this.listofClasses.add(javaFile);
         }
+        FileInputStream inputS = new FileInputStream(projectlocation + filename);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputS));
+        projectReader(reader);
     }
 
     public void setStartClassName(String className) throws IOException {
@@ -182,7 +185,7 @@ public class Project {
     }
 
     public boolean ifNoStartClassName() {
-        return this.startClassName.equals("null");
+        return this.startClassName.equals("*notSetYet*");
     }
 
 }

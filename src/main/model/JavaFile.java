@@ -52,11 +52,11 @@ public class JavaFile {
             fileSync = new FileSync(location,filename + ".javaCH");
             fileSync.getFile();
             setFileContain();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
-        return true;
     }
 
     public void setFile() {
