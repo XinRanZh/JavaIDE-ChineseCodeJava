@@ -28,8 +28,11 @@ public class Compile {
                     + loc + " & java -Duser.language=en -Dfile.encoding=UTF-8 " + classname);
         } else {
             String tmpLoclinux = loc.replaceAll("\\\\","/");
-            processrun = runtimerun.exec("cd " + tmpLoclinux
-                   + " && java -Duser.language=en -Dfile.encoding=UTF-8 " + classname);
+            String cmd = "cd " + tmpLoclinux
+                    + " && java -Duser.language=en -Dfile.encoding=UTF-8 " + classname;
+            String[] command = new String[]{"sh","-c",cmd};
+            processrun = runtimerun.exec(command);
+
         }
         return getRes(processrun,"Run");
     }

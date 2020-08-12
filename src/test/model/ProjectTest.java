@@ -9,6 +9,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ProjectTest {
 
+    private String osdetector(String loc) {
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            return loc;
+        } else {
+            String loclinux = loc.replaceAll("\\\\","/");
+            return loclinux;
+        }
+    }
+
     @Test
     void testProject() throws IOException {
         String testLoc = "data\\testorg\\";
@@ -18,12 +28,12 @@ public class ProjectTest {
         }
         Project project = new Project(false,testLoc,"test.jCHprojectinfo");
         project.openProject();
-        assertEquals("-d data\\testorg\\ data\\testorg\\Compile.java" +
+        assertEquals(osdetector("-d data\\testorg\\ data\\testorg\\Compile.java" +
                 " data\\testorg\\Convert.java data\\testorg\\FileSync.java data\\" +
                 "testorg\\GUI.java data\\testorg\\JavaFile.java data\\testorg\\Main.java" +
                 " data\\testorg\\Project.java data\\testorg\\Compile.java data\\testorg\\" +
                 "Convert.java data\\testorg\\FileSync.java data\\testorg\\GUI.java data\\" +
-                "testorg\\JavaFile.java data\\testorg\\Main.java data\\testorg\\Project.java ",project.genCompileOrder());
+                "testorg\\JavaFile.java data\\testorg\\Main.java data\\testorg\\Project.java "),project.genCompileOrder());
         project.convertAll(new Convert());
         assertEquals("package model;\n" +
                 "\n" +
@@ -105,7 +115,7 @@ public class ProjectTest {
                 "    }\n" +
                 "}\n",project.getSelectFile(0));
         assertEquals("Project Name:Main\n" +
-                "Project Location:data\\testorg\\\n" +
+                osdetector("Project Location:data\\testorg\\\n") +
                 "No0:Compile\n" +
                 "No1:Convert\n" +
                 "No2:FileSync\n" +
@@ -200,12 +210,12 @@ public class ProjectTest {
                 "    }\n" +
                 "}\n");
         assertEquals("ui.Main",project.getStartClassName());
-        assertEquals("data\\testorg\\",project.getProjectlocation());
+        assertEquals(osdetector("data\\testorg\\"),project.getProjectlocation());
         project.deleteClass("Compile");
         project.generateProjectText();
         project.writeProject();
         assertEquals("Project Name:Main\n" +
-                "Project Location:data\\testorg\\\n" +
+                osdetector("Project Location:data\\testorg\\\n") +
                 "No0:Convert\n" +
                 "No1:FileSync\n" +
                 "No2:GUI\n" +
@@ -216,7 +226,7 @@ public class ProjectTest {
         project.generateProjectText();
         project.writeProject();
         assertEquals("Project Name:Main\n" +
-                "Project Location:data\\testorg\\\n" +
+                osdetector("Project Location:data\\testorg\\\n") +
                 "No0:Convert\n" +
                 "No1:FileSync\n" +
                 "No2:GUI\n" +

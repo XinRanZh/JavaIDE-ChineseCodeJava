@@ -7,7 +7,7 @@ public class FileSync {
     protected static String location;
     protected static String filename;
     public static StringBuffer contain; //What in the .java file
-    
+
     public FileSync(StringBuffer con, String loc,String filename) {
         this.contain = con;
         this.location = loc;
@@ -20,6 +20,15 @@ public class FileSync {
         this.filename = filename;
     }
 
+    private static String osdetector(String loc) {
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            return loc;
+        } else {
+            String loclinux = loc.replaceAll("\\\\","/");
+            return loclinux;
+        }
+    }
 
     public StringBuffer getCon() {
         return this.contain;
@@ -47,7 +56,7 @@ public class FileSync {
 
     public static void getFile() throws IOException {
         InputStream inputS;
-        File tmpfile = new File(location + filename);
+        File tmpfile = new File(osdetector(location + filename));
         String tmpLoc = tmpfile.getCanonicalPath();
         inputS = new FileInputStream(tmpLoc);
         String tmpLine;

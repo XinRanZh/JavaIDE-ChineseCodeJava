@@ -146,8 +146,9 @@ public class ConvertTest {
     void testGetDicSourceandLocation() throws IOException {
         Convert convert = new Convert();
         convert.getDictSource();
-        assertEquals(".\\data\\",convert.getLocation());
+        assertEquals(osdetector(".\\data\\"),convert.getLocation());
     }
+
 
 
 }

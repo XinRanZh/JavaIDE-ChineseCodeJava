@@ -59,7 +59,7 @@ class CompileTest {
                 "    }\n" +
                 "}\n",String.valueOf(fileSync.getCon()));
         Compile compile = new Compile();
-        assertEquals("data\\test\\testfailed.java:3: error: cannot find symbol\n" +
+        assertEquals(osdetector("data\\test\\testfailed.java:3: error: cannot find symbol\n") +
                 "        System.out.priasdfdasfsadfntln(\"Hello, worlllllllllllllllllld!\");\n" +
                 "                  ^\n" +
                 "  symbol:   method priasdfdasfsadfntln(String)\n" +
@@ -68,6 +68,15 @@ class CompileTest {
                 "Complie Failed",compile.build(testLoc + "testfailed.java"));
 }
 
+    private String osdetector(String loc) {
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            return loc;
+        } else {
+            String loclinux = loc.replaceAll("\\\\","/");
+            return loclinux;
+        }
+    }
 
     }
 
