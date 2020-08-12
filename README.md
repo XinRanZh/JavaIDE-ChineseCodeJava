@@ -57,3 +57,6 @@ This simple and rudimentary IDE has most of the functions that a common IDE shou
 - If changing the file displaying, it will automatically save current file
 - Refreshing will automatically save the file
 
+### Phase 4: Task 2
+
+- Map used: Class Convert

@@ -14,7 +14,7 @@ class CompileTest {
     @Test
     void TestRunSuccess() throws IOException, InterruptedException {
         String testLoc = "data\\test\\";
-        JavaFile javaFile = new JavaFile(testLoc,new ArrayList<>(),new Convert());
+        JavaFile javaFile = new JavaFile(testLoc,new Convert());
         String os = System.getProperty("os.name");
         if (!os.toLowerCase().startsWith("win")) {
             testLoc = testLoc.replaceAll("\\\\","/");

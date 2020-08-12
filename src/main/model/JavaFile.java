@@ -1,47 +1,35 @@
 package model;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class JavaFile {
-    ArrayList<String> packagename;
     String filename;
     String location;
     FileSync fileSync;
     Convert convert;
     StringBuffer fileContain;
 
-    public JavaFile(String filename,ArrayList<String> packagename,Convert convert) {
+    public JavaFile(String filename,Convert convert) {
         this.filename = filename;
-        this.packagename = packagename;
         this.convert = convert;
         location = "";
-        for (String s : packagename) {
-            location = location + s + "\\";
-        }
         String os = System.getProperty("os.name");
-        if (os.toLowerCase().startsWith("win")) {
-            this.location = location;
-        } else {
-            String loclinux = location.replaceAll("\\\\","/");
-            this.location = loclinux;
+        if (!os.toLowerCase().startsWith("win")) {
+            this.location = location.replaceAll("\\\\","/");
         }
     }
 
     public JavaFile() {
         filename = "";
-        packagename = new ArrayList<String>();
     }
 
     public void setname(String filename) {
         this.filename = filename;
     }
-
-    //public void addPakageName(String packagename) {
-    //    this.packagename.add(packagename);
-    //}
 
     public void setLocation(String location) {
         this.location = location;

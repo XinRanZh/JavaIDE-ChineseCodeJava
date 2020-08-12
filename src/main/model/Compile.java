@@ -5,18 +5,7 @@ import java.io.*;
 public class Compile {
     //Complie and run the file
     //Expect to run a whole project after next part
-    StringBuffer tmpText;
-    String tmpLoc;
     String tmpfileName;
-
-    public Compile(/*StringBuffer stringBuffer, String tmpLoc, String fileName*/) throws IOException {
-      //  this.tmpText = stringBuffer;
-      //  this.tmpLoc = tmpLoc + "debug\\";
-      //  this.tmpfileName = fileName;
-     //   creatTmpFile();
-    }
-
-
 
     public String build(String command) throws IOException, InterruptedException {
         //javac is the command to build java class file
@@ -38,8 +27,9 @@ public class Compile {
             processrun = runtimerun.exec("cmd.exe /c cd "
                     + loc + " & java -Duser.language=en -Dfile.encoding=UTF-8 " + classname);
         } else {
-            String tmpLoclinux = tmpLoc.replaceAll("\\\\","/");
-            processrun = runtimerun.exec("cd " + tmpLoclinux + " && java -Duser.language=en " + tmpfileName);
+            String tmpLoclinux = loc.replaceAll("\\\\","/");
+            processrun = runtimerun.exec("cd " + tmpLoclinux
+                   + " && java -Duser.language=en -Dfile.encoding=UTF-8 " + classname);
         }
         return getRes(processrun,"Run");
     }

@@ -18,7 +18,7 @@ public class JavaFileTest {
         }
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("fadsafdsadsfasdf");
-        JavaFile javaFilex = new JavaFile("testJF",arrayList,new Convert());
+        JavaFile javaFilex = new JavaFile("testJF",new Convert());
         javaFilex.setLocation(testLoc);
         javaFilex.readFile();
         javaFilex.setFileContain("public class test{\n" +

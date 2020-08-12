@@ -1,4 +1,4 @@
-public class test{
+权限公开 类 test{
     public static void main(String[] args){
         System.out.println("Hello, worlllllllllllllllllld!");
     }

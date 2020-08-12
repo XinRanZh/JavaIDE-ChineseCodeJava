@@ -26,11 +26,7 @@ public class Project {
         String os = System.getProperty("os.name");
         this.filename = name;
         this.startClassName = "*notSetYet*";
-        if (os.toLowerCase().startsWith("win")) {
-            this.projectlocation = location;
-        } else {
-            this.projectlocation = location.replaceAll("\\\\","/");
-        }
+        this.projectlocation = osdetector(location);
         //this.projectlocation = location.substring(0,location.length() - name.length());
         this.projectname = name;
         this.listofClasses = new ArrayList<>();

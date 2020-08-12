@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 public class GUI {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -366,7 +367,7 @@ public class GUI {
                 String result = JOptionPane.showInputDialog("Please enter the rule's result \n 请输入规则的转换结果");
                 convert.addrule(source,result);
                 try {
-                    convert.dictionaryWritter(convert.getLocation(),convert.getDictName());
+                    convert.dictionaryWritter();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -409,7 +410,7 @@ public class GUI {
         Highlighter highlighter = editorPane.getHighlighter();
         String text = editorPane.getText();
         DefaultHighlighter.DefaultHighlightPainter p = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
-        String[] source = convert.getDictSource();
+        Set<String> source = convert.getDictSource();
         int pos;
         for (String string : source) {
             pos = 0;

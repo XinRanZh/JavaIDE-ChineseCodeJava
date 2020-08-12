@@ -1,7 +1,9 @@
 package model;
 
-import javax.imageio.IIOException;
 import java.io.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class Convert {
     //Convert Java Source from Chinese-Java Language to Normal Java Code
@@ -9,8 +11,7 @@ public class Convert {
 
     private StringBuffer tmpText;
     private StringBuffer tmpDict;
-    private String[] dictSource = new String[100];
-    private String[] dictResult = new String[100];
+    private Map<String,String> dictmap = new LinkedHashMap<>();
 
     public String getDictName() {
         return dictName;
@@ -24,15 +25,13 @@ public class Convert {
     }
 
     private String location;
-    private int count = 0;
 
     private String osdetector(String loc) {
         String os = System.getProperty("os.name");
         if (os.toLowerCase().startsWith("win")) {
             return loc;
         } else {
-            String loclinux = loc.replaceAll("\\\\","/");
-            return loclinux;
+            return loc.replaceAll("\\\\","/");
         }
     }
 
@@ -45,65 +44,57 @@ public class Convert {
     public Convert(StringBuffer stringBuffer, String dictName, String location) throws IOException {
         this.tmpText = stringBuffer;
         this.dictName = dictName;
-        this.location = location;
+        this.location = osdetector(location);
         dictionaryReader();
     }
 
     //Read the dictionary and save the file to the lists
     void dictionaryReader() throws IOException {
-        String os = System.getProperty("os.name");
         InputStream inputS;
-        inputS = new FileInputStream(osdetector(this.location) + dictName);
-        String tmpLine;
-        count = 0;
+        inputS = new FileInputStream(this.location + dictName);
+        String tmpOrg;
+        String tmpRes;
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputS));
-        tmpLine = reader.readLine();
-        while (tmpLine != null) {
-            tmpLine = reader.readLine();
-            dictSource[count] = tmpLine;
-            tmpLine = reader.readLine();
-            dictResult[count] = tmpLine;
-            count++;
+        tmpOrg = reader.readLine();
+        while (tmpOrg != null) {
+            tmpOrg = reader.readLine();
+            tmpRes = reader.readLine();
+            this.dictmap.put(tmpOrg,tmpRes);
         }
         reader.close();
         inputS.close();
     }
 
     //Write edited dictionary to file
-    public void dictionaryWritter(String location, String dictname) throws IOException {
+    public void dictionaryWritter() throws IOException {
         tmpDict = new StringBuffer();
-        tmpDict.append(dictname + "\n");
-        for (int n = 0; n < count - 2; n++) {
-            tmpDict.append(dictSource[n] + "\n");
-            tmpDict.append(dictResult[n] + "\n");
+        tmpDict.append(dictName + "\n");
+        Set<String> keys = this.dictmap.keySet();
+        for (String key : keys) {
+            tmpDict.append(key + "\n");
+            tmpDict.append(this.dictmap.get(key) + "\n");
         }
-        tmpDict.append(dictSource[count - 2] + "\n");
-        tmpDict.append(dictResult[count - 2]);
         //Make sure there is no blank last line
         FileWriter fileWriter;
-        fileWriter = new FileWriter(osdetector(location) + dictname);
+        fileWriter = new FileWriter(osdetector(location) + dictName);
         fileWriter.write(String.valueOf(tmpDict));
         fileWriter.close();
     }
 
     //add an convert rule to the file
-    public boolean addrule(String source,String result) {
-        if (count <= 99) {
-            dictSource[count - 1] = source;
-            dictResult[count - 1] = result;
-            count++;
-            return true;
-        } else {
-            return false;
-        }
+    public void addrule(String source,String result) {
+        this.dictmap.put(source,result);
     }
 
     public void dictionaryConvert() {
         //Convert using rules
-        for (int n = 0; n < count - 1; n++) {
+        Set<String> keys = dictmap.keySet();
+        keys.remove("null");
+        keys.remove(null);
+        for (String key : keys) {
             String tmpString = tmpText.toString();
-            tmpString = tmpString.replaceAll(dictSource[n],dictResult[n]);
-            System.out.println(dictSource[n]);
+            tmpString = tmpString.replaceAll(key,dictmap.get(key));
+            System.out.println(dictmap.get(key));
             StringBuffer sbtmp = new StringBuffer();
             sbtmp.append(tmpString);
             this.tmpText = sbtmp;
@@ -122,18 +113,18 @@ public class Convert {
     public String getDicContain() {
         tmpDict = new StringBuffer();
         tmpDict.append(dictName + "\n");
-        for (int n = 0; n < count - 2; n++) {
-            tmpDict.append(dictSource[n] + "\n");
-            tmpDict.append(dictResult[n] + "\n");
-            n++;
+        Set<String> keys = dictmap.keySet();
+        keys.remove("null");
+        keys.remove(null);
+        for (String key : keys) {
+            tmpDict.append(key + "\n");
+            tmpDict.append(dictmap.get(key) + "\n");
         }
-        tmpDict.append(dictSource[count - 2] + "\n");
-        tmpDict.append(dictResult[count - 2]);
         return String.valueOf(tmpDict);
     }
 
-    public String[] getDictSource() {
-        return dictSource;
+    public Set<String> getDictSource() {
+        return dictmap.keySet();
     }
 
 }
