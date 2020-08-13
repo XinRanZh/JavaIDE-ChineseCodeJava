@@ -5,7 +5,6 @@ import java.io.*;
 public class Compile {
     //Complie and run the file
     //Expect to run a whole project after next part
-    String tmpfileName;
 
     public String build(String command) throws IOException, InterruptedException {
         //javac is the command to build java class file
@@ -43,20 +42,20 @@ public class Compile {
         BufferedReader br = new BufferedReader(new InputStreamReader(outputStream, "gb2312"));
         BufferedReader br2 = new BufferedReader(new InputStreamReader(errorstream, "gb2312"));
         StringBuffer resultText = new StringBuffer();
-        String line = null;
-        String line2 = null;
+        String line;
+        String line2;
         while ((line = br.readLine()) != null | (line2 = br2.readLine()) != null) {
             if (line != null) {
-                resultText.append(line + '\n');
+                resultText.append(line).append('\n');
             } else {
-                resultText.append(line2 + '\n');
+                resultText.append(line2).append('\n');
             }
         }
         int result = process.waitFor();
         if (result == 0) {
-            resultText.append(str + " Success");
+            resultText.append(str).append(" Success");
         } else {
-            resultText.append(str + " Failed");
+            resultText.append(str).append(" Failed");
         }
         process.destroy();
         return String.valueOf(resultText);

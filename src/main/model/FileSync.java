@@ -1,6 +1,7 @@
 package model;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class FileSync {
     //Read and write the file
@@ -9,15 +10,15 @@ public class FileSync {
     public static StringBuffer contain; //What in the .java file
 
     public FileSync(StringBuffer con, String loc,String filename) {
-        this.contain = con;
-        this.location = loc;
-        this.filename = filename;
+        contain = con;
+        location = loc;
+        FileSync.filename = filename;
     }
 
-    public FileSync(String loc,String filename) throws IOException {
-        this.contain = new StringBuffer();
-        this.location = loc;
-        this.filename = filename;
+    public FileSync(String loc,String filename) {
+        contain = new StringBuffer();
+        location = loc;
+        FileSync.filename = filename;
     }
 
     private static String osdetector(String loc) {
@@ -25,33 +26,32 @@ public class FileSync {
         if (os.toLowerCase().startsWith("win")) {
             return loc;
         } else {
-            String loclinux = loc.replaceAll("\\\\","/");
-            return loclinux;
+            return loc.replaceAll("\\\\","/");
         }
     }
 
     public StringBuffer getCon() {
-        return this.contain;
+        return contain;
     }
 
     public String getLoc() {
-        return this.location;
+        return location;
     }
 
     public String getFilename() {
-        return this.filename;
+        return filename;
     }
 
     public void setCon(StringBuffer con) {
-        this.contain = con;
+        contain = con;
     }
 
     public void setLoc(String loc) {
-        this.location = loc;
+        location = loc;
     }
 
     public void setFilename(String filename) {
-        this.filename = filename;
+        FileSync.filename = filename;
     }
 
     public static void getFile() throws IOException {
@@ -60,7 +60,7 @@ public class FileSync {
         String tmpLoc = tmpfile.getCanonicalPath();
         inputS = new FileInputStream(tmpLoc);
         String tmpLine;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputS,"UTF-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputS, StandardCharsets.UTF_8));
         tmpLine = reader.readLine();
         while (tmpLine != null) {
             contain.append(tmpLine);
@@ -72,7 +72,6 @@ public class FileSync {
     }
 
     public void setFile(String fname) throws IOException {
-        String os = System.getProperty("os.name");
         FileWriter fileWriter;
         File tmpfile = new File(location + fname);
         String tmploc = tmpfile.getCanonicalPath();

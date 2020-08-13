@@ -23,11 +23,9 @@ public class Project {
     }
 
     public Project(boolean creat,String location,String name) throws IOException {
-        String os = System.getProperty("os.name");
         this.filename = name;
         this.startClassName = "*notSetYet*";
         this.projectlocation = osdetector(location);
-        //this.projectlocation = location.substring(0,location.length() - name.length());
         this.projectname = name;
         this.listofClasses = new ArrayList<>();
         if (creat) {

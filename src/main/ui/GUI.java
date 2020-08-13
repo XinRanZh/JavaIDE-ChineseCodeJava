@@ -1,21 +1,14 @@
 package ui;
 
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_MULTIPLYPeer;
 import model.Compile;
 import model.Convert;
 import model.Project;
 
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -69,8 +62,7 @@ public class GUI {
         if (os.toLowerCase().startsWith("win")) {
             return loc;
         } else {
-            String loclinux = loc.replaceAll("\\\\","/");
-            return loclinux;
+            return loc.replaceAll("\\\\","/");
         }
     }
 
@@ -145,258 +137,208 @@ public class GUI {
     }
 
     private void setOpenProject() {
-        openProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setProjectFileChooserConfig();
-                String projectlocation = "";
-                if (projectFileChooser.showOpenDialog(openProject) == JFileChooser.APPROVE_OPTION) {
-                    File file = projectFileChooser.getSelectedFile();
-                    try {
-                        projectlocation = file.getCanonicalPath();
-                        String projectConfigName = file.getName();
-                        projectlocation = projectlocation.substring(0,projectlocation.length()
-                                - projectConfigName.length());
-                        pj = new Project(false,projectlocation,projectConfigName);
-                        System.out.println(pj.getProjectlocation());
-                        projectContainArea.setText(pj.getFileTree());
-                        index = 0;
-                        setEditorPane(index);
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
+        openProject.addActionListener(e -> {
+            setProjectFileChooserConfig();
+            String projectlocation;
+            if (projectFileChooser.showOpenDialog(openProject) == JFileChooser.APPROVE_OPTION) {
+                File file = projectFileChooser.getSelectedFile();
+                try {
+                    projectlocation = file.getCanonicalPath();
+                    String projectConfigName = file.getName();
+                    projectlocation = projectlocation.substring(0,projectlocation.length()
+                            - projectConfigName.length());
+                    pj = new Project(false,projectlocation,projectConfigName);
+                    System.out.println(pj.getProjectlocation());
+                    projectContainArea.setText(pj.getFileTree());
+                    index = 0;
+                    setEditorPane(index);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                 }
             }
         });
     }
 
     private void setNewProject() {
-        newProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String newProjectLocation = "";
-                newProjectLocChooser.setMultiSelectionEnabled(false);
-                newProjectLocChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                newProjectLocChooser.setAcceptAllFileFilterUsed(true);
-                if (newProjectLocChooser.showOpenDialog(newProject) == JFileChooser.APPROVE_OPTION) {
-                    File file = newProjectLocChooser.getSelectedFile();
-                    try {
-                        newProjectLocation = file.getCanonicalPath() + "\\";
-                        System.out.println(newProjectLocation);
-                        String s = JOptionPane.showInputDialog("Please Enter the Name of Project\n 请输入工程名称:");
-                        pj = new Project(true,newProjectLocation,s);
-                        projectContainArea.setText(pj.getFileTree());
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
+        newProject.addActionListener(e -> {
+            String newProjectLocation;
+            newProjectLocChooser.setMultiSelectionEnabled(false);
+            newProjectLocChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            newProjectLocChooser.setAcceptAllFileFilterUsed(true);
+            if (newProjectLocChooser.showOpenDialog(newProject) == JFileChooser.APPROVE_OPTION) {
+                File file = newProjectLocChooser.getSelectedFile();
+                try {
+                    newProjectLocation = file.getCanonicalPath() + "\\";
+                    System.out.println(newProjectLocation);
+                    String s = JOptionPane.showInputDialog("Please Enter the Name of Project\n 请输入工程名称:");
+                    pj = new Project(true,newProjectLocation,s);
+                    projectContainArea.setText(pj.getFileTree());
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                 }
             }
         });
     }
 
     private void setCloseProject() {
-        closeProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pj = null;
-                editorPane.setText("");
-                resArea.setText("");
-                projectContainArea.setText("Not Opend Project Yet");
-            }
+        closeProject.addActionListener(e -> {
+            pj = null;
+            editorPane.setText("");
+            resArea.setText("");
+            projectContainArea.setText("Not Opend Project Yet");
         });
     }
 
     private void setAddFiletoProject() {
-        addFiletoProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String s = JOptionPane.showInputDialog("Please Enter the Name of File"
-                        + "\n Do not include .javaCH"
-                        + "\n 请输入文件名称，不包括后缀名:");
-                try {
-                    pj.addClass(s);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                pj.generateProjectText();
-                try {
-                    pj.writeProject();
-                    projectContainArea.setText(pj.getFileTree());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+        addFiletoProject.addActionListener(e -> {
+            String s = JOptionPane.showInputDialog("Please Enter the Name of File"
+                    + "\n Do not include .javaCH"
+                    + "\n 请输入文件名称，不包括后缀名:");
+            try {
+                pj.addClass(s);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            pj.generateProjectText();
+            try {
+                pj.writeProject();
+                projectContainArea.setText(pj.getFileTree());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
         });
     }
 
     private void setSetStartClassName() {
-        setStartClassName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String s = JOptionPane.showInputDialog("Please Enter the Start Class"
-                        + "\n Using Package Name + . + ClassName\n Such as UI.Main"
-                        + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
-                try {
-                    pj.setStartClassName(s);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+        setStartClassName.addActionListener(e -> {
+            String s = JOptionPane.showInputDialog("Please Enter the Start Class"
+                    + "\n Using Package Name + . + ClassName\n Such as UI.Main"
+                    + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
+            try {
+                pj.setStartClassName(s);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
         });
     }
 
     private void setDeleteFileFromProject() {
-        deleteFileFromProject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String s = JOptionPane.showInputDialog("Please enter the class that need to be delete\n"
-                        + "请输入待删除的类名");
-                if (pj.deleteClass(s)) {
-                    JOptionPane.showMessageDialog(null,"Delete success 删除成功");
-                    projectContainArea.setText(pj.getFileTree());
-                } else {
-                    JOptionPane.showMessageDialog(null,"Class not exist 工程内没有这个类");
-                }
+        deleteFileFromProject.addActionListener(e -> {
+            String s = JOptionPane.showInputDialog("Please enter the class that need to be delete\n"
+                    + "请输入待删除的类名");
+            if (pj.deleteClass(s)) {
+                JOptionPane.showMessageDialog(null,"Delete success 删除成功");
+                projectContainArea.setText(pj.getFileTree());
+            } else {
+                JOptionPane.showMessageDialog(null,"Class not exist 工程内没有这个类");
             }
         });
     }
 
     private void setBuildOnly() {
-        buildOnly.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                save();
-                try {
-                    cp = new Compile();
-                    if (pj.ifNoStartClassName()) {
-                        String s = JOptionPane.showInputDialog("Please Enter the Start Class"
-                                + "\n Using Package Name + . + ClassName\n Such as UI.Main"
-                                + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
-                        pj.setStartClassName(s);
-                    }
-                    pj.convertAll(convert);
-                    String tmpRes = cp.build(pj.genCompileOrder());
-                    resArea.setText(tmpRes);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
+        buildOnly.addActionListener(e -> {
+            save();
+            try {
+                cp = new Compile();
+                if (pj.ifNoStartClassName()) {
+                    String s = JOptionPane.showInputDialog("Please Enter the Start Class"
+                            + "\n Using Package Name + . + ClassName\n Such as UI.Main"
+                            + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
+                    pj.setStartClassName(s);
                 }
-
+                pj.convertAll(convert);
+                String tmpRes = cp.build(pj.genCompileOrder());
+                resArea.setText(tmpRes);
+            } catch (IOException | InterruptedException ioException) {
+                ioException.printStackTrace();
             }
+
         });
     }
 
     private void setBuildandRun() {
-        buildandRun.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    save();
-                    if (pj.ifNoStartClassName()) {
-                        String s = JOptionPane.showInputDialog("Please Enter the Start Class"
-                                + "\n Using Package Name + . + ClassName\n Such as UI.Main"
-                                + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
-                        pj.setStartClassName(s);
-                    }
-                    cp = new Compile();
-                    pj.convertAll(convert);
-                    String tmpRes = cp.build(pj.genCompileOrder());
-                    tmpRes = tmpRes + "\n" + cp.run(pj.getProjectlocation(),pj.getStartClassName());
-                    resArea.setText(tmpRes);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
+        buildandRun.addActionListener(e -> {
+            try {
+                save();
+                if (pj.ifNoStartClassName()) {
+                    String s = JOptionPane.showInputDialog("Please Enter the Start Class"
+                            + "\n Using Package Name + . + ClassName\n Such as UI.Main"
+                            + "\n 请输入启动的类名称\n使用包名+点+类名的形式,比如\n UI.Main:");
+                    pj.setStartClassName(s);
                 }
+                cp = new Compile();
+                pj.convertAll(convert);
+                String tmpRes = cp.build(pj.genCompileOrder());
+                tmpRes = tmpRes + "\n" + cp.run(pj.getProjectlocation(),pj.getStartClassName());
+                resArea.setText(tmpRes);
+            } catch (IOException | InterruptedException ioException) {
+                ioException.printStackTrace();
             }
         });
     }
 
     private void setSaveOnly() {
-        saveOnly.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                save();
-            }
-        });
+        saveOnly.addActionListener(e -> save());
     }
 
     private void setSaveandExit() {
-        saveandExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pj.setSelectFile(index,editorPane.getText());
-                System.exit(0);
-            }
+        saveandExit.addActionListener(e -> {
+            pj.setSelectFile(index,editorPane.getText());
+            System.exit(0);
         });
     }
 
     private void setChooseDictionary() {
-        chooseDictionary.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String dictionaryLocation = "";
-                dictionaryChooser.setMultiSelectionEnabled(false);
-                dictionaryChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                dictionaryChooser.setAcceptAllFileFilterUsed(true);
-                if (dictionaryChooser.showOpenDialog(openProject) == JFileChooser.APPROVE_OPTION) {
-                    File file = dictionaryChooser.getSelectedFile();
-                    try {
-                        dictionaryLocation = file.getCanonicalPath();
-                        String dictionaryName = file.getName();
-                        convert = new Convert(new StringBuffer(),dictionaryName,
-                                dictionaryLocation.substring(0,dictionaryLocation.length()
-                                        - dictionaryName.length()));
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
+        chooseDictionary.addActionListener(e -> {
+            String dictionaryLocation;
+            dictionaryChooser.setMultiSelectionEnabled(false);
+            dictionaryChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            dictionaryChooser.setAcceptAllFileFilterUsed(true);
+            if (dictionaryChooser.showOpenDialog(openProject) == JFileChooser.APPROVE_OPTION) {
+                File file = dictionaryChooser.getSelectedFile();
+                try {
+                    dictionaryLocation = file.getCanonicalPath();
+                    String dictionaryName = file.getName();
+                    convert = new Convert(new StringBuffer(),dictionaryName,
+                            dictionaryLocation.substring(0,dictionaryLocation.length()
+                                    - dictionaryName.length()));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                 }
-
             }
+
         });
     }
 
     private void setAddrulestoDictionary() {
-        String source = null;
-        String result = null;
-        addrulestoDictionary.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String source = JOptionPane.showInputDialog("Please enter the rule's source \n 请输入规则的源本");
-                String result = JOptionPane.showInputDialog("Please enter the rule's result \n 请输入规则的转换结果");
-                convert.addrule(source,result);
-                try {
-                    convert.dictionaryWritter();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+        addrulestoDictionary.addActionListener(e -> {
+            String source = JOptionPane.showInputDialog("Please enter the rule's source \n 请输入规则的源本");
+            String result = JOptionPane.showInputDialog("Please enter the rule's result \n 请输入规则的转换结果");
+            convert.addrule(source,result);
+            try {
+                convert.dictionaryWritter();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
         });
 
     }
 
     private void setchooseFile() {
-        chooseFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                save();
-                String s = JOptionPane.showInputDialog("Please enter the File's Number\n 请输入文件编号:");
-                index = Integer.valueOf(s);
-                System.out.println(index);
-                setEditorPane(index);
-            }
+        chooseFile.addActionListener(e -> {
+            save();
+            String s = JOptionPane.showInputDialog("Please enter the File's Number\n 请输入文件编号:");
+            index = Integer.parseInt(s);
+            System.out.println(index);
+            setEditorPane(index);
         });
     }
 
     private void setRefresh() {
-        refresh.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                save();
-                setEditorPane(index);
-                setHighlighter();
-            }
+        refresh.addActionListener(e -> {
+            save();
+            setEditorPane(index);
+            setHighlighter();
         });
     }
 
@@ -422,7 +364,6 @@ public class GUI {
                     e.printStackTrace();
                 }
             }
-            pos = 0;
         }
     }
 

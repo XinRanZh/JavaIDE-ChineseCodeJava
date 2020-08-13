@@ -68,11 +68,11 @@ public class Convert {
     //Write edited dictionary to file
     public void dictionaryWritter() throws IOException {
         tmpDict = new StringBuffer();
-        tmpDict.append(dictName + "\n");
+        tmpDict.append(dictName).append("\n");
         Set<String> keys = this.dictmap.keySet();
         for (String key : keys) {
-            tmpDict.append(key + "\n");
-            tmpDict.append(this.dictmap.get(key) + "\n");
+            tmpDict.append(key).append("\n");
+            tmpDict.append(this.dictmap.get(key)).append("\n");
         }
         //Make sure there is no blank last line
         FileWriter fileWriter;
@@ -112,13 +112,13 @@ public class Convert {
     //Output converted File
     public String getDicContain() {
         tmpDict = new StringBuffer();
-        tmpDict.append(dictName + "\n");
+        tmpDict.append(dictName).append("\n");
         Set<String> keys = dictmap.keySet();
         keys.remove("null");
         keys.remove(null);
         for (String key : keys) {
-            tmpDict.append(key + "\n");
-            tmpDict.append(dictmap.get(key) + "\n");
+            tmpDict.append(key).append("\n");
+            tmpDict.append(dictmap.get(key)).append("\n");
         }
         return String.valueOf(tmpDict);
     }

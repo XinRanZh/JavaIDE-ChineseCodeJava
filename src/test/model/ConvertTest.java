@@ -95,8 +95,7 @@ public class ConvertTest {
         if (os.toLowerCase().startsWith("win")) {
             return loc;
         } else {
-            String loclinux = loc.replaceAll("\\\\","/");
-            return loclinux;
+            return loc.replaceAll("\\\\","/");
         }
     }
 
