@@ -1,7 +1,7 @@
 # A Chinese-Java IDE 
 
-## The CPSC210 Personal Project 
-
+## The Java UBC CPSC210 Personal Project 
+ 
 After studying for a long time, I finished this project
 
 
@@ -26,7 +26,6 @@ This simple and rudimentary IDE has most of the functions that a common IDE shou
 **P.S** 
 - If add a class name that is not already exist, it will be creat automatically
 - When open a project, it will highlight the keyword
-- **Multi Media:** data/bg.png showed on the left of the Open Project Button
 
 ### Dictionary Management
 - Change the dictionary that using
@@ -57,6 +56,6 @@ This simple and rudimentary IDE has most of the functions that a common IDE shou
 - If changing the file displaying, it will automatically save current file
 - Refreshing will automatically save the file
 
-### Phase 4: Task 2
-
-- Map used: Class Convert
+### MISC
+- UML diagram is UML.png
+- Video can be found at https://www.youtube.com/watch?v=an15vN7xBJI
